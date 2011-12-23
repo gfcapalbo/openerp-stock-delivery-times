@@ -40,6 +40,7 @@ class stock_picking(osv.osv):
     }
 
     def action_confirm(self, cr, uid, ids, context=None):
+        '''This method add the original date at the creation of the picking, this date will not be modified after'''
         res = super(stock_picking, self).action_confirm(cr, uid, ids, context=context)
         for picking in self.read(cr, uid, ids, ['max_date','original_date'], context=context):
             if not picking['original_date']:

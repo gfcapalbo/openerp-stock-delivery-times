@@ -70,12 +70,11 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="min_date" position="replace">
-                        <field name="min_date" string="Min. Expected Date"/>
+                        <field name="max_date" string="Expected Shipment Date"/>
                     </field>
-                    <field name="min_date" position="after">
-                        <field name="max_date"/>
+                    <xpath expr="/form/notebook/page[2]/field[5]" position="after">
                         <field name="original_date"/>
-                    </field>
+                    </xpath>
                 </data>
             </field>                    
         </record>
