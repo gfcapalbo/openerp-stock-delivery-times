@@ -25,6 +25,7 @@ import res_company
 import sale
 import resource
 import delivery
+import purchase
 
 
 

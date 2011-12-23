@@ -31,16 +31,43 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 class stock_picking(osv.osv):
 
     _inherit = "stock.picking"
+    
+    def get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
+        print '8888888888888888888888888888888888888888888'
+        res = super(stock_picking, self).get_min_max_date(cr, uid, ids, field_name, arg, context=context)
+        for picking in self.browse(cr, uid, ids, context=context):
+            if not picking.carrier_id or res[picking.id]['max_date'] == False    :
+                res[picking.id]['delivery_date'] = False
+            else:
+                start_date = datetime.strptime(res[picking.id]['max_date'], DEFAULT_SERVER_DATETIME_FORMAT)
+                print start_date
+                res[picking.id]['delivery_date'] = (self.pool.get('resource.calendar')._get_date(cr, uid, picking.carrier_id.calendar_id.id, start_date, picking.carrier_id.delivery_lead_time, context=context)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        print res
+        return res
 
-    def _get_delivery_date(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for picking_id in ids:
-            picking = self.browse(cr, uid, picking_id, context=context)
-            res[picking_id] = self.pool.get('resource.calendar')._get_date(cr, uid, picking.carrier_id.calendar_id.id, picking.max_date.split()[0], picking.carrier_id.delivery_lead_time, context=context)
+    def _set_maximum_date(self, cr, uid, ids, name, value, arg, context=None):
+        return super(stock_picking, self)._set_maximum_date(self, cr, uid, ids, name, value, arg, context=context)
+
+    def _set_minimum_date(self, cr, uid, ids, name, value, arg, context=None):
+        return super(stock_picking, self)._set_minimum_date(self, cr, uid, ids, name, value, arg, context=context)
+
+    def _get_picking_from_delivery(self, cr, uid, ids, context=None):
+        print 'lalalalalalalalala'
+        res = self.pool.get('stock.picking').search(cr, uid, [('carrier_id', '=', ids[0]), ('state', '!=', 'done')], context=context)
+        print 'res', res
         return res
 
     _columns = {
-        'delivery_date': fields.function(_get_delivery_date, string='Delivery Date', help="Date of delivery to the customer"), #TODO store=True
+        'delivery_date': fields.function(get_min_max_date, string='Delivery Date', type="datetime", multi="min_max_date", help="Date of delivery to the customer", 
+                                            store={
+                                'delivery.carrier':(_get_picking_from_delivery, ['delivery_lead_time'], 10),
+                                'stock.picking':(lambda self, cr, uid, ids, c=None: ids, ['carrier_id','max_date'], 10),
+
+        }),
+        'min_date': fields.function(get_min_max_date, fnct_inv=_set_minimum_date, multi="min_max_date",
+                 store=True, type='datetime', string='Expected Date', select=1, help="Expected date for the picking to be processed"),
+        'max_date': fields.function(get_min_max_date, fnct_inv=_set_maximum_date, multi="min_max_date",
+                 store=True, type='datetime', string='Max. Expected Date', select=2),
     }
 
     _defautls = {
