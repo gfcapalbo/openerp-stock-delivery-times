@@ -28,52 +28,24 @@ from dateutil.relativedelta import relativedelta
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
-class resource_calendar(osv.osv):
+class stock_picking(osv.osv):
 
-    _inherit = "resource.calendar"
+    _inherit = "stock.picking"
+
+    def _get_delivery_date(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for picking_id in ids:
+            picking = self.browse(cr, uid, picking_id, context=context)
+            res[picking_id] = self.pool.get('resource.calendar')._get_date(cr, uid, picking.carrier_id.calendar_id.id, picking.max_date.split()[0], picking.carrier_id.delivery_lead_time, context=context)
+        return res
 
     _columns = {
+        'delivery_date': fields.function(_get_delivery_date, string='Delivery Date', help="Date of delivery to the customer"), #TODO store=True
     }
 
     _defautls = {
     }
 
-    def _get_date(self, cr, uid, id, start_date, delay, resource=False, context=None):
-        if not id:
-            company_id = self.pool.get('res.users').get_current_company(cr, uid)[0][0]
-            calendar_id = self.pool.get('res.company').read(cr, uid, company_id, ['calendar_id'], context=context)['calendar_id'][0]
-            id = calendar_id
-        dt_leave = self._get_leaves(cr, uid, id, resource)
-        calendar_info = self.browse(cr, uid, id, context=context)
-        worked_days = [day['dayofweek'] for day in calendar_info.attendance_ids]
-        start_date = datetime.strptime(start_date, "%Y-%m-%d")
-        while datetime.strftime(start_date, "%Y-%m-%d") in dt_leave or str(start_date.weekday()) not in worked_days:
-            start_date = start_date + timedelta(days=1)
-        date = start_date
-        while delay:
-            date = date + timedelta(days=1)
-            if datetime.strftime(date, "%Y-%m-%d") not in dt_leave and str(date.weekday()) in worked_days:
-                delay -= 1
-        return date
 
-resource_calendar()
 
-class sale_order(osv.osv):
-    
-    _inherit = "sale.order"
-    
-
-    _columns = {
-    }
-
-    _defaults = {
-    }
-
-    def _get_date_planned(self, cr, uid, order, line, start_date, *args):
-        date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay)
-        date_planned = (date_planned - timedelta(days=order.company_id.security_lead)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        
-        return date_planned  
-
-sale_order()
-
+stock_picking()

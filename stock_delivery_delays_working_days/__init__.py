@@ -21,8 +21,10 @@
 
 
 import stock
-import product
 import res_company
+import sale
+import resource
+import delivery
 
 
 
