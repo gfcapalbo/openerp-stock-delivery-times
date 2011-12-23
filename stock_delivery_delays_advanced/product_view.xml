@@ -58,7 +58,7 @@
             </field>
         </record>     
 
-        <record id="action_order_form" model="ir.actions.act_window">
+        <record id="action_supplier_shortage_view" model="ir.actions.act_window">
             <field name="name">Supplier Shortage</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">product.supplierinfo</field>
@@ -68,8 +68,14 @@
             <field name="context">{"search_default_user_id":uid}</field>
             <field name="help">Supplier Shortage help you manage products and suppliers.You can filter the products which have their supplier in shortage.</field>
         </record>
+        <record id="action_supplier_shortage_tree_view" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_supplier_shortage_tree"/>
+            <field name="act_window_id" ref="action_supplier_shortage_view"/>
+        </record>
 
-        <menuitem action="action_order_form" id="menu_supplier_shortage" parent="base.menu_product" sequence="3" groups="base.group_sale_salesman,base.group_sale_manager"/>
+        <menuitem action="action_supplier_shortage_view" id="menu_supplier_shortage" parent="base.menu_product" sequence="3" groups="base.group_sale_salesman,base.group_sale_manager"/>
 
     </data>
 </openerp>

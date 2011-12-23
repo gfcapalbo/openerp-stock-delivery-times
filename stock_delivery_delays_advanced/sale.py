@@ -43,6 +43,7 @@ class sale_order_line(osv.osv):
     def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
         uom=False, qty_uos=0, uos=False, name='', partner_id=False,
         lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False, flag=False, context=None, order_lines=False):
+        '''This method determine if there is enough stock for a sale order and calculate the corresponding delay''' 
         res= super(sale_order_line, self).product_id_change(cr, uid, ids, pricelist, product, qty,
         uom, qty_uos, uos, name, partner_id, lang, update_tax, date_order, packaging, fiscal_position, flag, context=context)   
         if order_lines != False and product:
@@ -74,10 +75,11 @@ class sale_order(osv.osv):
     _defaults = {
     }
 
-    def _get_date_planned(self, cr, uid, order, line, start_date, *args):
+    def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
+        '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in functio of the supplier_shortage'''
         if line.supplier_shortage:
             start_date = line.supplier_shortage
-        date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay)
+        date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay, context=context)
         date_planned = (date_planned - timedelta(days=order.company_id.security_lead)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return date_planned  
 

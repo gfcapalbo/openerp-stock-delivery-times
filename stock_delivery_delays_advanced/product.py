@@ -41,6 +41,7 @@ class product_supplierinfo(osv.osv):
     }
 
     def run_supplier_shortage_scheduler(self, cr, uid, context=None):
+        '''Cron task to delete the supplier shortage attribute when the date has passed'''
         old_shortage_id = self.search(cr, uid, [('supplier_shortage', '<=', date.today())], context=context)
         self.write(cr, uid, old_shortage_id, {'supplier_shortage' : False}, context=context)
         return True
