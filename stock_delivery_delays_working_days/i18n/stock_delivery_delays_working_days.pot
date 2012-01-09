@@ -1,0 +1,119 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* stock_delivery_delays_working_days
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1beta\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-09 11:46+0000\n"
+"PO-Revision-Date: 2012-01-09 11:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_delivery_delays_working_days
+#: sql_constraint:sale.order:0
+msgid "Order Reference must be unique per Company!"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: constraint:res.company:0
+msgid "Error! You can not create recursive companies."
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: field:delivery.carrier,delivery_lead_time:0
+msgid "Delivery Lead Time"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: code:addons/stock_delivery_delays_working_days/resource.py:47
+#, python-format
+msgid "Error !"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_resource_calendar
+msgid "Resource Calendar"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: field:stock.picking,delivery_date:0
+msgid "Delivery Date"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: help:stock.picking,delivery_date:0
+msgid "Date of delivery to the customer"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:delivery.carrier:0
+msgid "Shipping Informations"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: code:addons/stock_delivery_delays_working_days/resource.py:47
+#, python-format
+msgid "You need to define a calendar for the company !"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: field:delivery.carrier,calendar_id:0
+msgid "Carrier Working time"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_procurement_order
+msgid "Procurement"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_delivery_carrier
+msgid "Carrier"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: sql_constraint:stock.picking:0
+msgid "Reference must be unique per Company!"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_stock_picking
+msgid "Picking List"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: sql_constraint:res.company:0
+msgid "The company name must be unique !"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:res.company:0
+msgid "Working Time"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:res.company:0
+msgid "Configuration"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: field:res.company,calendar_id:0
+msgid "Company Working time"
+msgstr ""
+
