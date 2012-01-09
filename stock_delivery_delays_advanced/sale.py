@@ -56,7 +56,8 @@ class sale_order_line(osv.osv):
             if (info_product.virtual_available - total_qty) >= 1:
                 res['value']['delay'] = info_product.sale_delay
             elif info_product.seller_info_id.supplier_shortage:
-                res['value']['delay'] = info_product.sale_delay + (info_product.seller_info_id.delay or 0.0)
+                #TODO use a different calendar for the supplier delay than the company calendar
+                res['value']['delay'] = info_product.sale_delay + (info_product.seller_info_id.delay or 0.0) 
                 res['value']['supplier_shortage'] = info_product.seller_info_id['supplier_shortage']
             else:
                 res['value']['delay'] = (info_product.seller_info_id.delay or 0.0) + info_product.sale_delay
@@ -76,7 +77,7 @@ class sale_order(osv.osv):
     }
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
-        '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in functio of the supplier_shortage'''
+        '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in function of the supplier_shortage'''
         if line.supplier_shortage:
             start_date = line.supplier_shortage
         start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
