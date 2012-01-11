@@ -95,7 +95,7 @@ class product_product(osv.osv):
                         break
                     date, incomming_qty = product_to_qty[id].pop()
                     qty_available += incomming_qty
-
+        print 'procurement_id_to_date', procurement_id_to_date
         return procurement_id_to_date
 
     def get_related_procurement(self, cr, uid, ids, maxdate, company_id, context=None):
@@ -119,6 +119,7 @@ class product_product(osv.osv):
             user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
             company_id = user.company_id.id
         product_to_procurement = self.get_related_procurement(cr, uid, ids, maxdate, company_id, context=context)
+        print "product_to_procurement", product_to_procurement, ids
         procurement_recomputed_date = self.get_reschedule_date(cr, uid, ids, product_to_procurement, company_id, context=context)
         procurement_obj = self.pool.get('procurement.order')
         for procurement_id in procurement_recomputed_date:
