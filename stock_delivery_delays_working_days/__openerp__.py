@@ -28,7 +28,7 @@
     'description': """empty""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['stock','product','purchase_to_sale','resource'], 
+    'depends': ['stock','product','resource', 'delivery'], # why 'purchase_to_sale'
     'init_xml': [],
     'update_xml': [ 
            'stock_view.xml',

@@ -43,10 +43,10 @@ class stock_picking(osv.osv):
         return res
 
     def _set_maximum_date(self, cr, uid, ids, name, value, arg, context=None):
-        return super(stock_picking, self)._set_maximum_date(self, cr, uid, ids, name, value, arg, context=context)
+        return super(stock_picking, self)._set_maximum_date(cr, uid, ids, name, value, arg, context=context)
 
     def _set_minimum_date(self, cr, uid, ids, name, value, arg, context=None):
-        return super(stock_picking, self)._set_minimum_date(self, cr, uid, ids, name, value, arg, context=context)
+        return super(stock_picking, self)._set_minimum_date(cr, uid, ids, name, value, arg, context=context)
 
     def _get_picking_from_delivery(self, cr, uid, ids, context=None):
         res = self.pool.get('stock.picking').search(cr, uid, [('carrier_id', '=', ids[0]), ('state', '!=', 'done')], context=context)
