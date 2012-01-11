@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  stock_delivery_delays_reschedule for OpenERP
+  Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+    
+        <!-- INHERITED VIEW FOR THE OBJECT : procurement_order -->
+
+        <record id="procurement_order_view_form" model="ir.ui.view">
+			<field name="name">stock_delivery_delais_recompute.procurement_order.view_form</field>
+			<field name="model">procurement.order</field>
+			<field name="inherit_id" ref="procurement.procurement_form_view" />
+            <field eval="16" name="priority"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<data>
+					<field name="date_planned" position="after">
+                        <field name="original_date_planned"/>
+					</field>
+				</data>
+			</field>
+		</record>
+
+    </data>
+</openerp>
