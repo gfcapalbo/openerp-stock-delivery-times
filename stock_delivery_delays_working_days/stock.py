@@ -35,9 +35,13 @@ class stock_picking(osv.osv):
     def get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
         res = super(stock_picking, self).get_min_max_date(cr, uid, ids, field_name, arg, context=context)
         for picking in self.browse(cr, uid, ids, context=context):
+            delivery_date = False
             if picking.carrier_id and res[picking.id]['max_date']:
                 start_date = datetime.strptime(res[picking.id]['max_date'], DEFAULT_SERVER_DATETIME_FORMAT)
                 delivery_date = (self.pool.get('resource.calendar')._get_date(cr, uid, picking.carrier_id.calendar_id.id, start_date, picking.carrier_id.delivery_lead_time, context=context)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            elif not picking.carrier_id and res[picking.id]['max_date']:
+                delivery_date = res[picking.id]['max_date']
+            if delivery_date:            
                 #path to fix fields.function bug indeed with a multi field the value is not updated"
                 cr.execute('update stock_picking set delivery_date = %s where id=%s', (delivery_date, picking.id))
         return res
@@ -55,8 +59,10 @@ class stock_picking(osv.osv):
     def _get_delivery_date(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for picking in self.browse(cr, uid, ids, context=context):
-            if not picking.carrier_id or picking.max_date == False:
+            if not picking.max_date:
                 res[picking.id] = False
+            elif not picking.carrier_id:
+                res[picking.id] = picking.max_date
             else:
                 start_date = datetime.strptime(picking.max_date, DEFAULT_SERVER_DATETIME_FORMAT)
                 res[picking.id] = (self.pool.get('resource.calendar')._get_date(cr, uid, picking.carrier_id.calendar_id.id, start_date, picking.carrier_id.delivery_lead_time, context=context)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
