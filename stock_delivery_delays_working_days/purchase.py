@@ -28,6 +28,27 @@ from dateutil.relativedelta import relativedelta
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
+class purchase_order_line(osv.osv):
+
+    _inherit = 'purchase.order.line'
+    
+    _columns = {
+    }
+
+    _defaults = {
+    }
+
+    def _get_date_planned(self, cr, uid, seller_delay, context=None):
+        """Return the datetime value to use as Schedule Date (``date_planned``) for the
+           Purchase Order Lines created in the purchase order considering the working time.
+
+           :param int seller_delay: the delivery delay of the supplier of the product.
+           :rtype: datetime
+           :return: the desired Schedule Date for the PO lines
+        """
+        date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, datetime.now(), seller_delay, context=context)
+        return date_planned.strftime('%Y-%m-%d %H:%M:%S')
+
 class procurement_order(osv.osv):
 
     _inherit = 'procurement.order'

@@ -39,7 +39,7 @@ class resource_calendar(osv.osv):
     }
 
     def _get_date(self, cr, uid, id, start_date, delay, resource=False, context=None):
-        '''This method gives the first date after a delay from the start date considering the working time attached to the company calendar'''
+        '''This method gives the first date after a delay from the start date considering the working time attached to the company calendar. Start_date should be a date not an openerp date'''
         if not id:
             company_id = self.pool.get('res.users').get_current_company(cr, uid)[0][0]
             company = self.pool.get('res.company').read(cr, uid, company_id, ['calendar_id'], context=context)
