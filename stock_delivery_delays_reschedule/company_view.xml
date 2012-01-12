@@ -19,7 +19,7 @@
 			<field name="arch" type="xml">
 				<data>
 					<field name="schedule_range" position="after">
-						<field name="recompute_range" />
+						<field name="reschedule_range" />
 					</field>
 				</data>
 			</field>

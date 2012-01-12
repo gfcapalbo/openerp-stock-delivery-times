@@ -26,16 +26,16 @@ import netsvc
 class res_company(osv.osv):
     
     _inherit = "res.company"
-    
+
     _columns = {
-        'recompute_range': fields.float('Scheduler Recompute Days', required=True,
+        'reschedule_range': fields.float('Reschedule Range Days', required=True,
             help="This is the time frame analysed by the scheduler when "\
-            "re-computing procurements. All procurements that are not between "\
-            "today and today+range are skipped for future re-computation."),
+            "re-scheduling procurements. All procurements that are not between "\
+            "today and today+range are skipped for future re-scheduling."),
     }
 
     _defaults = {
-        'schedule_range': 10.0,
+        'reschedule_range': 10.0,
     }
 
 res_company()

@@ -44,7 +44,7 @@ class procurement_order(osv.osv):
             company_ids = company_obj.search(cr, uid, [], context=context)
             print "=====company ids===", company_ids
             for company in company_obj.browse(cr, uid, company_ids, context=context):
-                maxdate = (datetime.today() + relativedelta(days=company.recompute_range)).strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
+                maxdate = (datetime.today() + relativedelta(days=company.reschedule_range)).strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
                 procurement_ids = procurement_obj.search(cr, uid, [['company_id', '=', company.id], ['not_enough_stock', '=', True], ['state', '=', 'exception'], ['date_planned', '<=', maxdate]])
                 print 'procurement to recompute', procurement_ids
                 date_to_product = defaultdict(list)
