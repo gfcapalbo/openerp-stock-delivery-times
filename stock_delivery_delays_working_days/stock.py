@@ -42,7 +42,8 @@ class stock_picking(osv.osv):
             elif not picking.carrier_id and res[picking.id]['max_date']:
                 delivery_date = res[picking.id]['max_date']
             if delivery_date:            
-                #path to fix fields.function bug indeed with a multi field the value is not updated"
+                #path to fix fields.function bug indeed with a multi field the value is not updated 
+                #https://bugs.launchpad.net/openobject-server/+bug/912189
                 cr.execute('update stock_picking set delivery_date = %s where id=%s', (delivery_date, picking.id))
         return res
 
