@@ -38,7 +38,7 @@ class purchase_order_line(osv.osv):
     _defaults = {
     }
 
-    def _get_date_planned(self, cr, uid, seller_delay, context=None):
+    def _get_date_planned(self, cr, uid, seller, context=None):
         """Return the datetime value to use as Schedule Date (``date_planned``) for the
            Purchase Order Lines created in the purchase order considering the working time.
 
@@ -46,8 +46,12 @@ class purchase_order_line(osv.osv):
            :rtype: datetime
            :return: the desired Schedule Date for the PO lines
         """
+        if seller:
+            seller_delay = seller.delay
+        else:
+            seller_delay = 0
         date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, datetime.now(), seller_delay, context=context)
-        return date_planned.strftime('%Y-%m-%d %H:%M:%S')
+        return date_planned
 
 class procurement_order(osv.osv):
 
