@@ -32,7 +32,6 @@
     'init_xml': [],
     'update_xml': [ 
            'stock_view.xml',
-           'stock_data.xml',
            'sale_view.xml',
            'product_view.xml',
            'product_data.xml',
