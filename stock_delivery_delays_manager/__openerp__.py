@@ -32,6 +32,7 @@
     'init_xml': [],
     'update_xml': [ 
            'stock_view.xml',
+           'stock_data.xml',
     ],
     'demo_xml': [],
     'installable': True,
