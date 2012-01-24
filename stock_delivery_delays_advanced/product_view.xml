@@ -14,7 +14,7 @@
 			<field name="name">delivery_delays.product_supplierinfo.view_form</field>
 			<field name="model">product.supplierinfo</field>
 			<field name="inherit_id" ref="product.product_supplierinfo_form_view" />
-            <field eval="16" name="priority"/>
+            <field eval="30" name="priority"/>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<data>
@@ -45,6 +45,7 @@
         <record id="view_supplier_shortage_tree" model="ir.ui.view">
             <field name="name">product.supplierinfo.list.select</field>
             <field name="model">product.supplierinfo</field>
+            <field eval="30" name="priority"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree editable="top" string="Supplier Shortage">

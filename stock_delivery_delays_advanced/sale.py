@@ -53,7 +53,7 @@ class sale_order_line(osv.osv):
                     total_qty += line_product[2]['product_uom_qty']
             total_qty = total_qty + qty
             info_product = self.pool.get('product.product').browse(cr, uid, product, context=context)
-            if (info_product.virtual_available - total_qty) >= 1:
+            if (info_product.virtual_available - total_qty) >= 1: #TODO check is there is an incomming shipment for the product
                 res['value']['delay'] = info_product.sale_delay
             elif info_product.seller_info_id.supplier_shortage:
                 #TODO use a different calendar for the supplier delay than the company calendar
