@@ -40,8 +40,10 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <data>
-                    <field name="min_date" position="replace">
+                    <field name="min_date" position="after">
                         <field name="max_date"/>
+                        <field name="original_date"/>
+                        <field name="diff_days"/>
                     </field>
                 </data>
             </field>
@@ -51,12 +53,12 @@
             <field name="name">delivery_delays.stock.picking.in.search</field>
             <field name="model">stock.picking</field>
 			<field name="inherit_id" ref="stock.view_picking_in_search" />
-            <field eval="16" name="priority"/>
+            <field eval="30" name="priority"/>
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <data>
                      <xpath expr="/search/group/filter[@name='done']" position="after">
-                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late" string="Late" domain="[('max_date','&lt;', (datetime.date.today()).strftime('%%Y-%%m-%%d %%H:%%M:%%S'))]" help="Late Incoming Shipments" />
+                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late" string="Late" domain="[('max_date','&lt;', (datetime.date.today()).strftime('%%Y-%%m-%%d %%H:%%M:%%S')),('state', '!=', 'done')]" help="Late Incoming Shipments" />
                     </xpath>
                 </data>
             </field>
@@ -93,8 +95,11 @@
                    <!-- <tree position="replace">
                         <tree colors="blue:state == 'draft';grey:state == 'cancel';red:state not in ('cancel', 'done') and max_date &lt; current_date" string="Delivery Orders"/>
                     </tree> -->
-                    <field name="min_date" position="replace">
+                    <field name="min_date" position="after">
                         <field name="max_date"/>
+                        <field name="original_date"/>
+                        <field name="diff_days"/>
+                        <field name="late_without_availability"/>
                     </field>
                 </data>
             </field>
@@ -109,7 +114,8 @@
             <field name="arch" type="xml">
                 <data>
                      <xpath expr="/search/group/filter[@name='to_invoice']" position="after">
-                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late" string="Late" domain="[('max_date','&lt;', (datetime.date.today()).strftime('%%Y-%%m-%%d %%H:%%M:%%S'))]" help="Late delivery orders" />
+                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late" string="Late" domain="[('max_date','&lt;', (datetime.date.today()).strftime('%%Y-%%m-%%d %%H:%%M:%%S')),('state', '!=', 'done')]" help="Late delivery orders" />
+                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late_without_availability" string="Late Without Availability" domain="[('late_without_availability', '=', 'True')]" help="Late delivery orders without availability" />
                     </xpath>
                 </data>
             </field>

@@ -25,15 +25,27 @@ import time
 from datetime import date
 from datetime import timedelta, datetime
 from dateutil.relativedelta import relativedelta
+from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class stock_picking(osv.osv):
 
     
     _inherit = "stock.picking"
     
+    def get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
+        res = super(stock_picking, self).get_min_max_date(cr, uid, ids, field_name, arg, context=context)
+        for picking in self.browse(cr, uid, ids, context=context):
+            if res[picking.id]['max_date'] and picking.original_date:
+                date_max = datetime.strptime(res[picking.id]['max_date'], DEFAULT_SERVER_DATETIME_FORMAT)
+                date_ori = datetime.strptime(picking.original_date, DEFAULT_SERVER_DATETIME_FORMAT)
+                interval = date_max - date_ori
+                res[picking.id]['diff_days'] = interval
+        return res
 
     _columns = {
         'original_date': fields.datetime('Original Expected Date', help= "Expected date planned at the creation of the picking, it doesn't change if the expected date change"),
+        'diff_days':fields.function(get_min_max_date, string='Interval Days', type="integer", store=True, multi="min_max_date", help= "Days between the original expected date and the max expected date"),
+        'late_without_availability':fields.boolean('Late Without Availability')
     }
 
     _defaults = {
@@ -47,6 +59,29 @@ class stock_picking(osv.osv):
                 picking['original_date'] = picking['max_date']
                 self.write(cr, uid, picking['id'], {'original_date' : picking['max_date']}, context=context)
         return res
+
+    def run_late_without_availability_scheduler(self, cr, uid, context=None):
+        yesterday = (datetime.now()-timedelta(days=1)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        late_pickings = self.search(cr, uid, [('max_date', '<', yesterday),('state', '!=', 'done')], context=context)
+        #TODO add parameter to choose when the picking is late 
+        pickings_without_availability = []
+        pickings_with_availability = []
+        for late_picking in late_pickings:
+            late_picking_info = self.browse(cr, uid, late_picking, context=context)
+            picking_state = late_picking_info.late_without_availability
+            new_picking_state = False
+            for line in late_picking_info.move_lines:
+                if line.product_id.qty_available <= 0:
+                    new_picking_state = True
+                    break
+            if picking_state != new_picking_state:
+                if new_picking_state == True:
+                    pickings_without_availability.append(late_picking)
+                else: 
+                    pickings_with_availability.append(late_picking)
+        self.write(cr, uid, pickings_without_availability, {'late_without_availability' : True}, context=context)
+        self.write(cr, uid, pickings_with_availability, {'late_without_availability' : False}, context=context)
+        return True
 
 stock_picking()
 
