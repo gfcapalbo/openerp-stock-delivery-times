@@ -38,7 +38,7 @@ class stock_picking(osv.osv):
             if res[picking.id]['max_date'] and picking.original_date:
                 date_max = datetime.strptime(res[picking.id]['max_date'], DEFAULT_SERVER_DATETIME_FORMAT)
                 date_ori = datetime.strptime(picking.original_date, DEFAULT_SERVER_DATETIME_FORMAT)
-                interval = date_max - date_ori
+                interval = int((date_max - date_ori).days)
                 res[picking.id]['diff_days'] = interval
         return res
 
