@@ -45,7 +45,7 @@ class stock_picking(osv.osv):
     _columns = {
         'original_date': fields.datetime('Original Expected Date', help= "Expected date planned at the creation of the picking, it doesn't change if the expected date change"),
         'diff_days':fields.function(get_min_max_date, string='Interval Days', type="integer", store=True, multi="min_max_date", help= "Days between the original expected date and the max expected date"),
-        'late_without_availability':fields.boolean('Late Without Availability')
+        'to_order':fields.boolean('To Order')
     }
 
     _defaults = {
@@ -60,7 +60,7 @@ class stock_picking(osv.osv):
                 self.write(cr, uid, picking['id'], {'original_date' : picking['max_date']}, context=context)
         return res
 
-    def run_late_without_availability_scheduler(self, cr, uid, context=None):
+    def run_to_order_scheduler(self, cr, uid, context=None):
         yesterday = (datetime.now()-timedelta(days=1)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         late_pickings = self.search(cr, uid, [('max_date', '<', yesterday),('state', '!=', 'done')], context=context)
         #TODO add parameter to choose when the picking is late 
@@ -68,7 +68,7 @@ class stock_picking(osv.osv):
         pickings_with_availability = []
         for late_picking in late_pickings:
             late_picking_info = self.browse(cr, uid, late_picking, context=context)
-            picking_state = late_picking_info.late_without_availability
+            picking_state = late_picking_info.to_order
             new_picking_state = False
             for line in late_picking_info.move_lines:
                 if line.product_id.qty_available <= 0:
@@ -79,8 +79,8 @@ class stock_picking(osv.osv):
                     pickings_without_availability.append(late_picking)
                 else: 
                     pickings_with_availability.append(late_picking)
-        self.write(cr, uid, pickings_without_availability, {'late_without_availability' : True}, context=context)
-        self.write(cr, uid, pickings_with_availability, {'late_without_availability' : False}, context=context)
+        self.write(cr, uid, pickings_without_availability, {'to_order' : True}, context=context)
+        self.write(cr, uid, pickings_with_availability, {'to_order' : False}, context=context)
         return True
 
 stock_picking()

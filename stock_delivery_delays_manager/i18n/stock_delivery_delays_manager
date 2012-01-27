@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-09 11:45+0000\n"
-"PO-Revision-Date: 2012-01-09 11:45+0000\n"
+"POT-Creation-Date: 2012-01-27 10:38+0000\n"
+"PO-Revision-Date: 2012-01-27 10:38+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
-msgid "Min. Expected Date"
+msgid "Delivery Expected Date"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
@@ -26,13 +26,33 @@ msgid "Late delivery orders"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
-#: sql_constraint:stock.picking:0
-msgid "Reference must be unique per Company!"
+#: view:stock.picking:0
+msgid "Reception Expected Date"
+msgstr ""
+
+#. module: stock_delivery_delays_manager
+#: view:stock.picking:0
+msgid "Min. Reception Expected Date"
+msgstr ""
+
+#. module: stock_delivery_delays_manager
+#: view:stock.picking:0
+msgid "To Order"
+msgstr ""
+
+#. module: stock_delivery_delays_manager
+#: help:stock.picking,diff_days:0
+msgid "Days between the original expected date and the max expected date"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Late Incoming Shipments"
+msgstr ""
+
+#. module: stock_delivery_delays_manager
+#: view:stock.picking:0
+msgid "Late delivery orders without purchase order"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
@@ -51,12 +71,17 @@ msgid "Picking List"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
-#: view:stock.picking:0
-msgid "Expected Shipment Date"
+#: field:stock.picking,diff_days:0
+msgid "Interval Days"
 msgstr ""
 
 #. module: stock_delivery_delays_manager
 #: field:stock.picking,original_date:0
 msgid "Original Expected Date"
+msgstr ""
+
+#. module: stock_delivery_delays_manager
+#: sql_constraint:stock.picking:0
+msgid "Reference must be unique per Company!"
 msgstr ""
 

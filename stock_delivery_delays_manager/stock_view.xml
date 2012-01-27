@@ -20,13 +20,13 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="min_date" position="replace">
-                        <field name="min_date" string="Min. Expected Date"/>
+                        <field name="min_date" string="Min. Reception Expected Date"/>
                     </field>
                     <field name="min_date" position="after">
-                        <field name="max_date"/>
+                        <field name="max_date" string="Reception Expected Date"/>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[@name='company_id']" position="after">
-                        <field name="original_date"/>
+                        <field name="original_date" />
                     </xpath>
                 </data>
             </field>                    
@@ -40,8 +40,8 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <data>
-                    <field name="min_date" position="after">
-                        <field name="max_date"/>
+                    <field name="min_date" position="replace">
+                        <field name="max_date" string="Reception Expected Date"/>
                         <field name="original_date"/>
                         <field name="diff_days"/>
                     </field>
@@ -75,7 +75,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="min_date" position="replace">
-                        <field name="max_date" string="Expected Shipment Date"/>
+                        <field name="max_date" string="Delivery Expected Date"/>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[5]" position="after">
                         <field name="original_date"/>
@@ -95,11 +95,11 @@
                    <!-- <tree position="replace">
                         <tree colors="blue:state == 'draft';grey:state == 'cancel';red:state not in ('cancel', 'done') and max_date &lt; current_date" string="Delivery Orders"/>
                     </tree> -->
-                    <field name="min_date" position="after">
-                        <field name="max_date"/>
+                    <field name="min_date" position="replace">
+                        <field name="max_date" string="Delivery Expected Date"/>
                         <field name="original_date"/>
                         <field name="diff_days"/>
-                        <field name="late_without_availability"/>
+                        <field name="to_order"/>
                     </field>
                 </data>
             </field>
@@ -115,7 +115,7 @@
                 <data>
                      <xpath expr="/search/group/filter[@name='to_invoice']" position="after">
                         <filter icon="terp-gnome-cpu-frequency-applet+" name="late" string="Late" domain="[('max_date','&lt;', (datetime.date.today()).strftime('%%Y-%%m-%%d %%H:%%M:%%S')),('state', '!=', 'done')]" help="Late delivery orders" />
-                        <filter icon="terp-gnome-cpu-frequency-applet+" name="late_without_availability" string="Late Without Availability" domain="[('late_without_availability', '=', 'True')]" help="Late delivery orders without availability" />
+                        <filter icon="terp-gnome-cpu-frequency-applet+" name="to_order" string="To Order" domain="[('to_order', '=', 'True')]" help="Late delivery orders without purchase order" />
                     </xpath>
                 </data>
             </field>
