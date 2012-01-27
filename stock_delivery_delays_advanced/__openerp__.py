@@ -35,6 +35,7 @@
            'sale_view.xml',
            'product_view.xml',
            'product_data.xml',
+           'wizard/stock_change_date_view.xml',
     ],
     'demo_xml': [],
     'installable': True,

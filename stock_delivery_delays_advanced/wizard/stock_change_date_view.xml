@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  stock_delivery_delays_advanced for OpenERP
+  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <record id="action_change_date" model="ir.actions.act_window">
+            <field name="name">Change Expected Date</field>
+            <field name="res_model">stock.change.date</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="stock_change_date_form" model="ir.ui.view">
+            <field name="name">stock.change.date.form</field>
+            <field name="model">stock.change.date</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator colspan="4" string="Products"/>
+                    <field name="move_ids" colspan="4" nolabel="1" mode="tree,form" width="550" height="200"/>
+                    <separator string="" colspan="4" />
+                    <label string="" colspan="2"/>
+                    <group col="2" colspan="2">
+                        <button icon='gtk-cancel' special="cancel" string="_Cancel" />
+                        <button name="do_change" string="_Validate" colspan="1" type="object" icon="gtk-go-forward" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="stock_change_date_line_list" model="ir.ui.view">
+            <field name="name">stock.change.date.line.list</field>
+            <field name="model">stock.change.date.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Product Moves">
+                    <field name="product_id" readonly="1"/>
+                    <field name="date_expected" readonly="1"/>
+                    <field name="new_date_expected" />
+                    <field name="supplier_shortage" />
+                </tree>
+            </field>
+        </record>
+        <record id="stock_change_date_line_form" model="ir.ui.view">
+            <field name="name">stock.change.date.line.form</field>
+            <field name="model">stock.change.date.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="product_id" readonly="1"/>
+                    <field name="date_expected" readonly="1"/>
+                    <field name="new_date_expected" />
+                    <field name="supplier_shortage" />
+                 </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

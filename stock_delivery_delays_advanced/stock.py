@@ -21,6 +21,31 @@
 
 from osv import osv, fields
 import netsvc
+from tools.translate import _
 
+class stock_picking(osv.osv):
+    _inherit = "stock.picking"
 
+    _columns = {
+    }
 
+    _defaults = {
+    }
+
+    def change_expected_date(self, cr, uid, ids, context=None):
+        if context is None: context = {}
+        context = dict(context, active_ids=ids, active_model=self._name)
+        move_id = self.pool.get("stock.change.date").create(cr, uid, {}, context=context)
+        return {
+            'name':_("Products to Change"),
+            'view_mode': 'form',
+            'view_id': False,
+            'view_type': 'form',
+            'res_model': 'stock.change.date',
+            'res_id': move_id,
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'new',
+            'domain': '[]',
+            'context': context,
+        }

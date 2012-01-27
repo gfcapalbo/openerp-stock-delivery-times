@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 10:42+0000\n"
-"PO-Revision-Date: 2012-01-27 10:42+0000\n"
-"Last-Translator: <Benoit Guillot>\n"
+"POT-Creation-Date: 2012-01-27 10:37+0000\n"
+"PO-Revision-Date: 2012-01-27 10:37+0000\n"
+"Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,42 +19,42 @@ msgstr ""
 #: model:ir.actions.act_window,name:stock_delivery_delays_advanced.action_change_date
 #: view:stock.picking:0
 msgid "Change Expected Date"
-msgstr "Changer la date prévue"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: sql_constraint:sale.order:0
 msgid "Order Reference must be unique per Company!"
-msgstr "La Référence de Commande doit être unique pour une même Compagnie!"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_purchase_order_line
 msgid "Purchase Order Line"
-msgstr "Ligne de commande d'achat"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: view:product.supplierinfo:0
 msgid "Search Product Supplierinfo"
-msgstr "Rechercher les informations fournisseur du produit"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.picking,to_order:0
 msgid "To Order"
-msgstr "A commander"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,wizard_id:0
 msgid "Wizard"
-msgstr "Wizard"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_stock_picking
 msgid "Picking List"
-msgstr "Bon de transfert"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,new_date_expected:0
 msgid "New Schedule Date"
-msgstr "Nouvelle date prévue"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.actions.act_window,name:stock_delivery_delays_advanced.action_supplier_shortage_view
@@ -64,92 +64,92 @@ msgstr "Nouvelle date prévue"
 #: field:sale.order.line,supplier_shortage:0
 #: field:stock.change.date.line,supplier_shortage:0
 msgid "Supplier Shortage"
-msgstr "Rupture fournisseur"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,date_expected:0
 msgid "Scheduled Date"
-msgstr "Date prévue"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,product_id:0
 msgid "Product"
-msgstr "Produit"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_product_supplierinfo
 msgid "Information about a product supplier"
-msgstr "Information sur le fournisseur du produit"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: view:product.supplierinfo:0
 msgid "Products with the supplier in shortage"
-msgstr "Produits avec le fournisseur en rupture de stock"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date,picking_id:0
 msgid "Picking"
-msgstr "Picking"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date,move_ids:0
 #: view:stock.change.date.line:0
 msgid "Product Moves"
-msgstr "Product Moves"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: view:stock.change.date:0
 msgid "Products"
-msgstr "Produits"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: sql_constraint:stock.picking:0
 msgid "Reference must be unique per Company!"
-msgstr "La référence doit être unique pour une même compagnie!"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: code:addons/stock_delivery_delays_advanced/stock.py:40
 #, python-format
 msgid "Products to Change"
-msgstr "Produits à modifier"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: view:stock.change.date:0
 msgid "_Validate"
-msgstr "_Validate"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,move_id:0
 msgid "Move"
-msgstr "Move"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date_line
 msgid "stock.change.date.line"
-msgstr "stock.change.date.line"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date
 msgid "Change Stock Date"
-msgstr "Changer la date du stock"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.actions.act_window,help:stock_delivery_delays_advanced.action_supplier_shortage_view
 msgid "Supplier Shortage help you manage products and suppliers.You can filter the products which have their supplier in shortage."
-msgstr "Rupture fournisseur vous aide a gérer les produits et leurs fournisseurs. Vous pouvez filter les produits qui ont leur fournisseur en rupture de stock."
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: view:stock.change.date:0
 msgid "_Cancel"
-msgstr "_Cancel"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_sale_order
 msgid "Sales Order"
-msgstr "Commande de ventes"
+msgstr ""
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Ligne de commandes de vente"
+msgstr ""
 
