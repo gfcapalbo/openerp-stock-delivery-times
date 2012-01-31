@@ -1,0 +1,65 @@
+# -*- encoding: utf-8 -*-
+#################################################################################
+#                                                                               #
+#    stock_delivery_delays_same_date_planned for OpenERP                                          #
+#    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
+#                                                                               #
+#    This program is free software: you can redistribute it and/or modify       #
+#    it under the terms of the GNU Affero General Public License as             #
+#    published by the Free Software Foundation, either version 3 of the         #
+#    License, or (at your option) any later version.                            #
+#                                                                               #
+#    This program is distributed in the hope that it will be useful,            #
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of             #
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
+#    GNU Affero General Public License for more details.                        #
+#                                                                               #
+#    You should have received a copy of the GNU Affero General Public License   #
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.      #
+#                                                                               #
+#################################################################################
+
+from osv import osv, fields
+import netsvc
+import time
+from datetime import date
+from datetime import timedelta, datetime
+from dateutil.relativedelta import relativedelta
+from tools.translate import _
+from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+
+class sale_order(osv.osv):
+    
+    _inherit = "sale.order"
+    
+
+    _columns = {
+    }
+
+    _defaults = {
+
+    }
+
+    def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
+        print 'éééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé'
+        if context:
+            print context
+            if context.get('force_date_planned'):
+                return context['force_date_planned'] 
+        return super(sale_order, self)._get_date_planned(cr, uid, order, line, start_date, context=context)
+
+    def _create_pickings_and_procurements(self, cr, uid, order, order_lines, picking_id=False, context=None):
+        max_date = False
+        context={}
+        print max_date
+        for line in order_lines:
+            date_planned = self._get_date_planned(cr, uid, order, line, order.date_order, context=context)
+            if date_planned > max_date:
+                max_date = date_planned
+                print max_date
+        context['force_date_planned'] = max_date
+        print context
+        return super(sale_order, self)._create_pickings_and_procurements(cr, uid, order, order_lines, picking_id=picking_id, context=context)
+
+sale_order()
+
