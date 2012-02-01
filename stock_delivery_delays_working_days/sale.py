@@ -41,7 +41,7 @@ class sale_order(osv.osv):
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
         '''This method overload the method _get_date_planned and use the method get_date to consider the working days'''
-        start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATETIME_FORMAT)
+        start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
         date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay, context=context)
         date_planned = (date_planned - timedelta(days=order.company_id.security_lead)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         
