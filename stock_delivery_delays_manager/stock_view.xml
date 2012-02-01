@@ -19,13 +19,11 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <data>
-                    <field name="min_date" position="replace">
-                        <field name="min_date" string="Min. Reception Expected Date"/>
-                    </field>
-                    <field name="min_date" position="after">
-                        <field name="max_date" string="Reception Expected Date"/>
+                    <field name="min_date" position="attributes">
+                        <attribute name="string">Reception Expected Date"</attribute>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[@name='company_id']" position="after">
+                        <field name="max_date" string="Reception End Expected Date"/>
                         <field name="original_date" />
                     </xpath>
                 </data>
@@ -40,8 +38,11 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <data>
-                    <field name="min_date" position="replace">
-                        <field name="max_date" string="Reception Expected Date"/>
+                    <field name="min_date" position="attributes">
+                        <attribute name="string">Reception Expected Date"</attribute>
+                    </field>
+                    <field name="min_date" position="after">
+                        <field name="max_date" string="Reception End Expected Date"/>
                         <field name="original_date"/>
                         <field name="diff_days"/>
                     </field>
@@ -74,10 +75,11 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <data>
-                    <field name="min_date" position="replace">
-                        <field name="max_date" string="Delivery Expected Date"/>
+                    <field name="min_date" position="attributes">
+                          <attribute name="string">Delivery Expected Date"</attribute>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[5]" position="after">
+                        <field name="max_date" string="Delivery End Expected Date"/>
                         <field name="original_date"/>
                     </xpath>
                 </data>
@@ -95,8 +97,11 @@
                    <!-- <tree position="replace">
                         <tree colors="blue:state == 'draft';grey:state == 'cancel';red:state not in ('cancel', 'done') and max_date &lt; current_date" string="Delivery Orders"/>
                     </tree> -->
-                    <field name="min_date" position="replace">
-                        <field name="max_date" string="Delivery Expected Date"/>
+                    <field name="min_date" position="attributes">
+                        <attribute name="string">Delivery Expected Date"</attribute>
+                    </field>
+                    <field name="min_date" position="after">
+                        <field name="max_date" string="Delivery End Expected Date"/>
                         <field name="original_date"/>
                         <field name="diff_days"/>
                         <field name="to_order"/>
