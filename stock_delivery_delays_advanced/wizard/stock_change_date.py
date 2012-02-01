@@ -105,20 +105,23 @@ class stock_change_date(osv.osv_memory):
                                                                     ('product_id', '=', move.product_id.id),
                                                                     ('name', '=', change.picking_id.partner_id.id)
                                                                     ], context=context)
-                supplierinfo = product_supplierinfo.browse(cr, uid, supplierinfo_id[0], context=context)
-                product_id = product_supplierinfo.write(cr, uid, supplierinfo_id, {
+                if not supplierinfo_id:
+                    raise osv.except_osv(_('Error !'), _('You need to define a supplierinfo for this product !'))
+                else:
+                    supplierinfo = product_supplierinfo.browse(cr, uid, supplierinfo_id[0], context=context)
+                    product_id = product_supplierinfo.write(cr, uid, supplierinfo_id, {
                                                                                 'supplier_shortage': move.supplier_shortage,
                                                                                 }, context=context)
-                start_date = datetime.strptime(move.supplier_shortage, DEFAULT_SERVER_DATE_FORMAT)
-                date_expected = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, supplierinfo.delay, context=context)
-                move_lines = stock_move.search(cr, uid, [
+                    start_date = datetime.strptime(move.supplier_shortage, DEFAULT_SERVER_DATE_FORMAT)
+                    date_expected = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, supplierinfo.delay, context=context)
+                    move_lines = stock_move.search(cr, uid, [
                                                         ('product_id', '=', move.product_id.id),
                                                         ('date_expected', '<', date_expected.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
                                                         ('picking_id.original_date', '>', change.picking_id.original_date)
                                                         ], context=context)
-                if move_id not in move_lines:
-                    move_lines.append(move_id)
-                stock_move.write(cr, uid, move_lines, {
+                    if move_id not in move_lines:
+                        move_lines.append(move_id)
+                    stock_move.write(cr, uid, move_lines, {
                                                     'date_expected' : date_expected,
                                                     'supplier_shortage' : move.supplier_shortage,
                                                     }, context=context)
