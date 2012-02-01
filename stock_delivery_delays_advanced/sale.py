@@ -80,10 +80,7 @@ class sale_order(osv.osv):
         '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in function of the supplier_shortage'''
         if line.supplier_shortage:
             start_date = line.supplier_shortage
-        start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
-        date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay, context=context)
-        date_planned = (date_planned - timedelta(days=order.company_id.security_lead)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        return date_planned  
+        return super(sale_order, self)._get_date_planned(cr, uid, order, line, start_date, context=context)
 
 sale_order()
 

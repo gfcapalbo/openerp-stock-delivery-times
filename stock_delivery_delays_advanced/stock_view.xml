@@ -21,10 +21,13 @@
                     <field name="stock_journal_id" position="after">
                         <button name="change_expected_date" string="Change Expected Date" type="object" icon="gtk-go-forward"/>
                     </field>
+                    <xpath expr="/form/notebook/page[1]/field/form/group[3]/field[3]" position="after">
+                        <field name="original_date_expected"/>
+                        <field name="supplier_shortage"/>
+                    </xpath>
                 </data>
-            </field>                    
+            </field>
         </record>
-
 
     </data>
 </openerp>

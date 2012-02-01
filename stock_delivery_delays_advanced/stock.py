@@ -23,6 +23,19 @@ from osv import osv, fields
 import netsvc
 from tools.translate import _
 
+class stock_move(osv.osv):
+    _inherit = "stock.move"
+    
+    _columns = {
+        'supplier_shortage': fields.date('Supplier Shortage'),
+        'original_date_expected':fields.datetime('Original Scheduled Date'),
+    }
+
+    def create(self, cr, uid, vals, context=None):
+        if vals.get('date_expected'):
+            vals['original_date_expected'] = vals['date_expected']
+        return super(stock_move, self).create(cr, uid, vals, context=context)
+
 class stock_picking(osv.osv):
     _inherit = "stock.picking"
 

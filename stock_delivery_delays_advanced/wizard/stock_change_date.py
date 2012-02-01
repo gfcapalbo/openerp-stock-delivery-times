@@ -21,19 +21,31 @@
 
 from osv import osv, fields
 import netsvc
-from tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
+from datetime import date
+from datetime import timedelta, datetime
+from tools.translate import _
+from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class stock_change_date_line(osv.TransientModel):
     _name = "stock.change.date.line"
     _rec_name = 'product_id'
     _columns = {
-        'product_id' : fields.many2one('product.product', string="Product", required=True, ondelete='CASCADE'),
+        'product_id' : fields.many2one('product.product', string="Product", required=True, readonly=True),
         'supplier_shortage': fields.date('Supplier Shortage'),
-        'date_expected': fields.datetime('Scheduled Date', required=True, ondelete='CASCADE'),
-        'move_id' : fields.many2one('stock.move', "Move", ondelete='CASCADE'),
-        'wizard_id' : fields.many2one('stock.change.date', string="Wizard", ondelete='CASCADE'),
+        'date_expected': fields.datetime('Scheduled Date', required=True, readonly=True),
+        'move_id' : fields.many2one('stock.move', "Move"),
+        'wizard_id' : fields.many2one('stock.change.date', string="Wizard"),
         'new_date_expected': fields.datetime('New Schedule Date'),
+        'change_supplier_shortage':fields.boolean('Change Shortage'),
+        'original_date_expected':fields.datetime('Original Scheduled Date', readonly=True),
     }
+
+    def on_change_supplier_shortage(self, cr, uid, ids, supplier_shortage, context=None):
+        print "onchange"
+        return {'value' : {'change_supplier_shortage' : True}}
+
+
+stock_change_date_line()
 
 class stock_change_date(osv.osv_memory):
     _name = "stock.change.date"
@@ -65,15 +77,11 @@ class stock_change_date(osv.osv_memory):
         return res
 
     def _change_date_for(self, cr, uid, move):
-        supplier_id = move.address_id.partner_id.id
-        supplier = move.address_id.partner_id
-        for seller in move.product_id.product_tmpl_id.seller_ids:
-            if seller.name == move.address_id.partner_id:
-                supplier_shortage = seller.supplier_shortage
         change_date = {
             'product_id' : move.product_id.id,
             'date_expected' : move.date_expected,
-            'supplier_shortage' : supplier_shortage,
+            'supplier_shortage' : move.supplier_shortage,
+            'original_date_expected': move.original_date_expected,
             'move_id' : move.id,
         }
         return change_date
@@ -82,6 +90,7 @@ class stock_change_date(osv.osv_memory):
         assert len(ids) == 1, 'change date may only be done one at a time'
         stock_picking = self.pool.get('stock.picking')
         stock_move = self.pool.get('stock.move')
+        product_supplierinfo = self.pool.get('product.supplierinfo')
         change = self.browse(cr, uid, ids[0], context=context)
         picking_type = change.picking_id.type
         change_data = {}
@@ -91,10 +100,33 @@ class stock_change_date(osv.osv_memory):
                 move_id = stock_move.write(cr,uid, move_id, {
                                                         'date_expected' : move.new_date_expected,
                                                         },context=context)
-                change_data['move%s' % (move_id)] = {
-                    'product_id': move.product_id.id,
-                    'date_expected' : move.new_date_expected,
-                    }
+            if move.change_supplier_shortage:
+                supplierinfo_id = product_supplierinfo.search(cr, uid, [
+                                                                    ('product_id', '=', move.product_id.id),
+                                                                    ('name', '=', change.picking_id.partner_id.id)
+                                                                    ], context=context)
+                supplierinfo = product_supplierinfo.browse(cr, uid, supplierinfo_id[0], context=context)
+                product_id = product_supplierinfo.write(cr, uid, supplierinfo_id, {
+                                                                                'supplier_shortage': move.supplier_shortage,
+                                                                                }, context=context)
+                start_date = datetime.strptime(move.supplier_shortage, DEFAULT_SERVER_DATE_FORMAT)
+                date_expected = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, supplierinfo.delay, context=context)
+                move_lines = stock_move.search(cr, uid, [
+                                                        ('product_id', '=', move.product_id.id),
+                                                        ('date_expected', '<', date_expected.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+                                                        ('picking_id.original_date', '>', change.picking_id.original_date)
+                                                        ], context=context)
+                if move_id not in move_lines:
+                    move_lines.append(move_id)
+                stock_move.write(cr, uid, move_lines, {
+                                                    'date_expected' : date_expected,
+                                                    'supplier_shortage' : move.supplier_shortage,
+                                                    }, context=context)
+
+            change_data['move%s' % (move_id)] = {
+                'product_id': move.product_id.id,
+                'date_expected' : move.new_date_expected,
+                }
 
         #stock_picking.do_change(cr, uid, [move.picking_id.id], change_data, context=context)
         return {'type': 'ir.actions.act_window_close'}
