@@ -23,7 +23,7 @@ msgstr "Livraisons en retard"
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Reception Expected Date\""
-msgstr "Date de réception prévue\""
+msgstr "Date de réception prévue"
 
 #. module: stock_delivery_delays_manager
 #: sql_constraint:stock.picking:0
@@ -44,7 +44,7 @@ msgstr "Jours d'écart entre la date prévue d'origine et la date maximale prév
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Shipping Expected Date\""
-msgstr "Date d'expédition prévue\""
+msgstr "Date d'expédition prévue"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
