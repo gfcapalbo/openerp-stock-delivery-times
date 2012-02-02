@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1beta\n"
+"Project-Id-Version: OpenERP Server 6.1rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 10:42+0000\n"
-"PO-Revision-Date: 2012-01-27 10:42+0000\n"
-"Last-Translator: <Benoit Guillot>\n"
+"POT-Creation-Date: 2012-02-02 14:59+0000\n"
+"PO-Revision-Date: 2012-02-02 14:59+0000\n"
+"Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr "Changer la date prévue"
 #. module: stock_delivery_delays_advanced
 #: sql_constraint:sale.order:0
 msgid "Order Reference must be unique per Company!"
-msgstr "La Référence de Commande doit être unique pour une même Compagnie!"
+msgstr "Order Reference must be unique per Company!"
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_purchase_order_line
@@ -37,14 +37,25 @@ msgid "Search Product Supplierinfo"
 msgstr "Rechercher les informations fournisseur du produit"
 
 #. module: stock_delivery_delays_advanced
-#: field:stock.picking,to_order:0
-msgid "To Order"
-msgstr "A commander"
+#: field:stock.change.date.line,change_supplier_shortage:0
+msgid "Change Shortage"
+msgstr "Rupture modifiée"
 
 #. module: stock_delivery_delays_advanced
-#: field:stock.change.date.line,wizard_id:0
-msgid "Wizard"
-msgstr "Wizard"
+#: view:stock.change.date:0
+msgid "Are you sure you want to modify this product ? It will change the expected date of all incomming shipments with the same product and change the supplier shortage date."
+msgstr "Etes vous sur de vouloir modifier ce produit ? Cela entrainera une modification de la date prévue pour toutes les réceptions avec ce produit et modifiera la date de rupture fournisseur."
+
+#. module: stock_delivery_delays_advanced
+#: field:stock.change.date.line,original_date_expected:0
+#: field:stock.move,original_date_expected:0
+msgid "Original Scheduled Date"
+msgstr "Date promise"
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You must assign a production lot for this product"
+msgstr "Vous devez affecter un lot de fabrication à ce produit."
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_stock_picking
@@ -63,6 +74,7 @@ msgstr "Nouvelle date prévue"
 #: field:product.supplierinfo,supplier_shortage:0
 #: field:sale.order.line,supplier_shortage:0
 #: field:stock.change.date.line,supplier_shortage:0
+#: field:stock.move,supplier_shortage:0
 msgid "Supplier Shortage"
 msgstr "Rupture fournisseur"
 
@@ -75,6 +87,22 @@ msgstr "Date prévue"
 #: field:stock.change.date.line,product_id:0
 msgid "Product"
 msgstr "Produit"
+
+#. module: stock_delivery_delays_advanced
+#: code:addons/stock_delivery_delays_advanced/wizard/stock_change_date.py:108
+#, python-format
+msgid "Error !"
+msgstr "Error !"
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You try to assign a lot which is not from the same product"
+msgstr "Vous essayez d'affecter un lot qui n'est pas pour ce produit."
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You can not move products from or to a location of the type view."
+msgstr "You can not move products from or to a location of the type view."
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_product_supplierinfo
@@ -92,26 +120,31 @@ msgid "Picking"
 msgstr "Picking"
 
 #. module: stock_delivery_delays_advanced
+#: field:stock.change.date.line,wizard_id:0
+msgid "Wizard"
+msgstr "Wizard"
+
+#. module: stock_delivery_delays_advanced
 #: field:stock.change.date,move_ids:0
 #: view:stock.change.date.line:0
 msgid "Product Moves"
-msgstr "Product Moves"
-
-#. module: stock_delivery_delays_advanced
-#: view:stock.change.date:0
-msgid "Products"
-msgstr "Produits"
+msgstr "Mouvements de produit"
 
 #. module: stock_delivery_delays_advanced
 #: sql_constraint:stock.picking:0
 msgid "Reference must be unique per Company!"
-msgstr "La référence doit être unique pour une même compagnie!"
+msgstr "Reference must be unique per Company!"
 
 #. module: stock_delivery_delays_advanced
-#: code:addons/stock_delivery_delays_advanced/stock.py:40
+#: code:addons/stock_delivery_delays_advanced/stock.py:53
 #, python-format
 msgid "Products to Change"
 msgstr "Produits à modifier"
+
+#. module: stock_delivery_delays_advanced
+#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_move
+msgid "Stock Move"
+msgstr "Mouvement de stock"
 
 #. module: stock_delivery_delays_advanced
 #: view:stock.change.date:0
@@ -121,17 +154,18 @@ msgstr "_Validate"
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,move_id:0
 msgid "Move"
-msgstr "Move"
+msgstr "Mouvement"
+
+#. module: stock_delivery_delays_advanced
+#: code:addons/stock_delivery_delays_advanced/wizard/stock_change_date.py:108
+#, python-format
+msgid "You need to define a supplierinfo for this product !"
+msgstr "Vous devez définir un fournisseur pour ce produit !"
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date_line
 msgid "stock.change.date.line"
 msgstr "stock.change.date.line"
-
-#. module: stock_delivery_delays_advanced
-#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date
-msgid "Change Stock Date"
-msgstr "Changer la date du stock"
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.actions.act_window,help:stock_delivery_delays_advanced.action_supplier_shortage_view
@@ -142,6 +176,11 @@ msgstr "Rupture fournisseur vous aide a gérer les produits et leurs fournisseur
 #: view:stock.change.date:0
 msgid "_Cancel"
 msgstr "_Cancel"
+
+#. module: stock_delivery_delays_advanced
+#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date
+msgid "Change Stock Date Wizard"
+msgstr "Assistant de changement des dates des stocks"
 
 #. module: stock_delivery_delays_advanced
 #: model:ir.model,name:stock_delivery_delays_advanced.model_sale_order

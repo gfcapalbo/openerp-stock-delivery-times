@@ -41,7 +41,6 @@ class stock_change_date_line(osv.TransientModel):
     }
 
     def on_change_supplier_shortage(self, cr, uid, ids, supplier_shortage, context=None):
-        print "onchange"
         return {'value' : {'change_supplier_shortage' : True}}
 
 

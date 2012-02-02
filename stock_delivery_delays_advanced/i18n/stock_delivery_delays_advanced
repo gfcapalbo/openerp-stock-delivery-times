@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1beta\n"
+"Project-Id-Version: OpenERP Server 6.1rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 10:37+0000\n"
-"PO-Revision-Date: 2012-01-27 10:37+0000\n"
+"POT-Creation-Date: 2012-02-02 14:53+0000\n"
+"PO-Revision-Date: 2012-02-02 14:53+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -37,13 +37,24 @@ msgid "Search Product Supplierinfo"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: field:stock.picking,to_order:0
-msgid "To Order"
+#: field:stock.change.date.line,change_supplier_shortage:0
+msgid "Change Shortage"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: field:stock.change.date.line,wizard_id:0
-msgid "Wizard"
+#: view:stock.change.date:0
+msgid "Are you sure you want to modify this product ? It will change the expected date of all incomming shipments with the same product and change the supplier shortage date."
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: field:stock.change.date.line,original_date_expected:0
+#: field:stock.move,original_date_expected:0
+msgid "Original Scheduled Date"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You must assign a production lot for this product"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
@@ -63,6 +74,7 @@ msgstr ""
 #: field:product.supplierinfo,supplier_shortage:0
 #: field:sale.order.line,supplier_shortage:0
 #: field:stock.change.date.line,supplier_shortage:0
+#: field:stock.move,supplier_shortage:0
 msgid "Supplier Shortage"
 msgstr ""
 
@@ -74,6 +86,22 @@ msgstr ""
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,product_id:0
 msgid "Product"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: code:addons/stock_delivery_delays_advanced/wizard/stock_change_date.py:108
+#, python-format
+msgid "Error !"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You try to assign a lot which is not from the same product"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: constraint:stock.move:0
+msgid "You can not move products from or to a location of the type view."
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
@@ -92,14 +120,14 @@ msgid "Picking"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: field:stock.change.date,move_ids:0
-#: view:stock.change.date.line:0
-msgid "Product Moves"
+#: field:stock.change.date.line,wizard_id:0
+msgid "Wizard"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: view:stock.change.date:0
-msgid "Products"
+#: field:stock.change.date,move_ids:0
+#: view:stock.change.date.line:0
+msgid "Product Moves"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
@@ -108,9 +136,14 @@ msgid "Reference must be unique per Company!"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: code:addons/stock_delivery_delays_advanced/stock.py:40
+#: code:addons/stock_delivery_delays_advanced/stock.py:53
 #, python-format
 msgid "Products to Change"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_move
+msgid "Stock Move"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
@@ -124,13 +157,14 @@ msgid "Move"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date_line
-msgid "stock.change.date.line"
+#: code:addons/stock_delivery_delays_advanced/wizard/stock_change_date.py:108
+#, python-format
+msgid "You need to define a supplierinfo for this product !"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
-#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date
-msgid "Change Stock Date"
+#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date_line
+msgid "stock.change.date.line"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
@@ -141,6 +175,11 @@ msgstr ""
 #. module: stock_delivery_delays_advanced
 #: view:stock.change.date:0
 msgid "_Cancel"
+msgstr ""
+
+#. module: stock_delivery_delays_advanced
+#: model:ir.model,name:stock_delivery_delays_advanced.model_stock_change_date
+msgid "Change Stock Date Wizard"
 msgstr ""
 
 #. module: stock_delivery_delays_advanced
