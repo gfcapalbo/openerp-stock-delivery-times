@@ -76,10 +76,10 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="min_date" position="attributes">
-                          <attribute name="string">Delivery Expected Date"</attribute>
+                          <attribute name="string">Shipping Expected Date"</attribute>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[5]" position="after">
-                        <field name="max_date" string="Delivery End Expected Date"/>
+                        <field name="max_date" string="Shipping End Expected Date"/>
                         <field name="original_date"/>
                     </xpath>
                 </data>
@@ -98,10 +98,10 @@
                         <tree colors="blue:state == 'draft';grey:state == 'cancel';red:state not in ('cancel', 'done') and max_date &lt; current_date" string="Delivery Orders"/>
                     </tree> -->
                     <field name="min_date" position="attributes">
-                        <attribute name="string">Delivery Expected Date"</attribute>
+                        <attribute name="string">Shipping Expected Date"</attribute>
                     </field>
                     <field name="min_date" position="after">
-                        <field name="max_date" string="Delivery End Expected Date"/>
+                        <field name="max_date" string="Shipping End Expected Date"/>
                         <field name="original_date"/>
                         <field name="diff_days"/>
                         <field name="to_order"/>
