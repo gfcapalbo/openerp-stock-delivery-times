@@ -21,9 +21,6 @@
                     <xpath expr="/form/notebook/page[2]/field[5]" position="after">
                         <field name="delivery_date"/>
                     </xpath>
-                    <xpath expr="/form/notebook/page[1]/field/form/group[3]/field[3]" position="after">
-                        <field name="move_delivery_date"/>
-                    </xpath>
                 </data>
             </field>                    
         </record>
