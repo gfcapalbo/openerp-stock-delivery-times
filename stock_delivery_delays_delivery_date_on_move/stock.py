@@ -21,7 +21,11 @@
 
 from osv import osv, fields
 import netsvc
-
+from datetime import date
+from datetime import timedelta, datetime
+from dateutil.relativedelta import relativedelta
+from tools.translate import _
+from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class stock_move(osv.osv):
     
