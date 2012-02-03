@@ -22,7 +22,10 @@
                     <field name="date" position="replace">
                         <field name="original_date"/>
                     </field>
-                    <field name="min_date" position="replace">
+                    <field name="min_date" position="attributes">
+                        <attribute name="string">Reception Start Expected Date</attribute>
+                    </field>
+                    <field name="min_date" position="after">
                         <field name="max_date" string="Reception End Expected Date"/>
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[@name='company_id']" position="after">
@@ -41,7 +44,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="min_date" position="attributes">
-                        <attribute name="string">Reception Expected Date</attribute>
+                        <attribute name="string">Reception Start Expected Date</attribute>
                     </field>
                     <field name="min_date" position="after">
                         <field name="max_date" string="Reception End Expected Date"/>
@@ -106,6 +109,7 @@
                     </tree> -->
                     <field name="min_date" position="attributes">
                         <attribute name="string">Shipping Expected Date</attribute>
+                        <attribute name="invisible">1</attribute>
                     </field>
                     <field name="min_date" position="after">
                         <field name="max_date" string="Shipping End Expected Date"/>

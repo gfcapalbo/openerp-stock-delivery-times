@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-03 10:20+0000\n"
-"PO-Revision-Date: 2012-02-03 10:20+0000\n"
+"POT-Creation-Date: 2012-02-03 14:59+0000\n"
+"PO-Revision-Date: 2012-02-03 14:59+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,17 +18,12 @@ msgstr ""
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Shipping Expected Date"
-msgstr "Date d'expédition prévue"
+msgstr "Date d'Expédition Prévue"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Late delivery orders"
 msgstr "Livraisons en retard"
-
-#. module: stock_delivery_delays_manager
-#: view:stock.picking:0
-msgid "Reception Expected Date"
-msgstr "Date de réception prévue"
 
 #. module: stock_delivery_delays_manager
 #: sql_constraint:stock.picking:0
@@ -39,7 +34,7 @@ msgstr "Reference must be unique per Company!"
 #: view:stock.picking:0
 #: field:stock.picking,to_order:0
 msgid "To Order"
-msgstr "A commander"
+msgstr "A Commander"
 
 #. module: stock_delivery_delays_manager
 #: help:stock.picking,diff_days:0
@@ -64,7 +59,7 @@ msgstr "Retard"
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Reception End Expected Date"
-msgstr "Date de fin de réception prévue"
+msgstr "Date de Fin de Réception Prévue"
 
 #. module: stock_delivery_delays_manager
 #: help:stock.picking,original_date:0
@@ -84,10 +79,15 @@ msgstr "Jours d'écart"
 #. module: stock_delivery_delays_manager
 #: field:stock.picking,original_date:0
 msgid "Original Expected Date"
-msgstr "Date promise"
+msgstr "Date Promise"
+
+#. module: stock_delivery_delays_manager
+#: view:stock.picking:0
+msgid "Reception Start Expected Date"
+msgstr "Date de Début de Réception Prévue"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Shipping End Expected Date"
-msgstr "Date de fin d'expédition prévue"
+msgstr "Date de Fin d'Expédition Prévue"
 
