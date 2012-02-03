@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.1rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-02 15:06+0000\n"
-"PO-Revision-Date: 2012-02-02 15:06+0000\n"
+"POT-Creation-Date: 2012-02-03 10:20+0000\n"
+"PO-Revision-Date: 2012-02-03 10:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,12 +17,17 @@ msgstr ""
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
+msgid "Shipping Expected Date"
+msgstr "Date d'expédition prévue"
+
+#. module: stock_delivery_delays_manager
+#: view:stock.picking:0
 msgid "Late delivery orders"
 msgstr "Livraisons en retard"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
-msgid "Reception Expected Date\""
+msgid "Reception Expected Date"
 msgstr "Date de réception prévue"
 
 #. module: stock_delivery_delays_manager
@@ -40,11 +45,6 @@ msgstr "A commander"
 #: help:stock.picking,diff_days:0
 msgid "Days between the original expected date and the max expected date"
 msgstr "Jours d'écart entre la date prévue d'origine et la date maximale prévue"
-
-#. module: stock_delivery_delays_manager
-#: view:stock.picking:0
-msgid "Shipping Expected Date\""
-msgstr "Date d'expédition prévue"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
