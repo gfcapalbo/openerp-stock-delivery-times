@@ -20,7 +20,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="date" position="replace">
-                        <field name="original_date"/>
+                        <field name="original_date" string="Original Reception Date"/>
                     </field>
                     <field name="min_date" position="attributes">
                         <attribute name="string">Reception Start Expected Date</attribute>
@@ -30,6 +30,9 @@
                     </field>
                     <xpath expr="/form/notebook/page[2]/field[@name='company_id']" position="after">
                         <field name="date"/>
+                    </xpath>
+                    <xpath expr="/form/notebook/page/field/form/group/field[@name='date_expected']" position="replace">
+                        <field name="date_expected" string="Reception Expected Date" on_change="onchange_date(date,date_expected)"/>
                     </xpath>
                 </data>
             </field>                    
@@ -48,7 +51,7 @@
                     </field>
                     <field name="min_date" position="after">
                         <field name="max_date" string="Reception End Expected Date"/>
-                        <field name="original_date"/>
+                        <field name="original_date" string="Original Reception Date"/>
                         <field name="diff_days"/>
                     </field>
                 </data>
@@ -81,7 +84,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="date" position="replace">
-                        <field name="original_date"/>
+                        <field name="original_date" string="Original Shipping Date"/>
                     </field>
                     <field name="min_date" position="replace">
                         <field name="max_date" string="Shipping End Expected Date"/>
@@ -89,8 +92,11 @@
                     <xpath expr="/form/notebook/page[2]/field[5]" position="after">
                         <field name="date"/>
                     </xpath>
-                    <xpath expr="/form/notebook/page[1]/field/tree/field[9]" position="replace">
-                        <field name="date_expected"/>
+                    <xpath expr="/form/notebook/page/field/tree/field[@name='date']" position="replace">
+                        <field name="date_expected" string="Shipping Expected Date"/>
+                    </xpath>
+                    <xpath expr="/form/notebook/page/field/form/group/field[@name='date_expected']" position="replace">
+                        <field name="date_expected" string="Shipping Expected Date" on_change="onchange_date(date,date_expected)"/>
                     </xpath>
                 </data>
             </field>                    
@@ -113,7 +119,7 @@
                     </field>
                     <field name="min_date" position="after">
                         <field name="max_date" string="Shipping End Expected Date"/>
-                        <field name="original_date"/>
+                        <field name="original_date" string="Original Shipping Date"/>
                         <field name="diff_days"/>
                         <field name="to_order"/>
                     </field>
