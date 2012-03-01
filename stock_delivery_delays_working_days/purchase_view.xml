@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  stock_delivery_delays_manager for OpenERP
+  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+    
+        <!-- INHERITED VIEW FOR THE OBJECT : purchase order -->
+
+		<record id="delivery_purchase_order_form" model="ir.ui.view">
+			<field name="name">delivery_delays.purchase.order.form</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field eval="16" name="priority"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<data>
+                    <xpath expr="/form/notebook/page/field/tree/field[@name='date_planned']" position="replace">
+                        <field name="date_planned" string="Reception Expected Date"/>
+                    </xpath>
+                    <xpath expr="/form/notebook/page/group/field[@name='minimum_planned_date']" position="replace">
+                        <field name="minimum_planned_date" string="Reception Expected Date"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+		<record id="delivery_purchase_order_tree" model="ir.ui.view">
+			<field name="name">delivery_delays.purchase.order.tree</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_tree" />
+            <field eval="16" name="priority"/>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<data>
+                    <xpath expr="/tree/field[@name='minimum_planned_date']" position="replace">
+                        <field name="minimum_planned_date" string="Reception Expected Date"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

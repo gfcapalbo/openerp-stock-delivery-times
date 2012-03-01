@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    stock_delivery_delays_working_days for OpenERP                                          #
+#    delivery_delays for OpenERP                                          #
 #    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
@@ -19,15 +19,13 @@
 #                                                                               #
 #################################################################################
 
+from osv import osv, fields
+import netsvc
 
-import stock
-import res_company
-import sale
-import resource
-import delivery
-import purchase
-import product
+class product_template(osv.osv):
 
-
-
-
+    _inherit = "product.template"
+    
+    _columns = {
+        'sale_delay': fields.float('Shipping Time', help="This is the average delay in days between the confirmation of the customer order and the delivery of the finished products to the carrier. By adding the carrier delivery lead time to this delay, you obtain the delivery time to the customer."),
+    }

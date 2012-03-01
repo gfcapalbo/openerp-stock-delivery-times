@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1rc1\n"
+"Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-02 14:51+0000\n"
-"PO-Revision-Date: 2012-02-02 14:51+0000\n"
+"POT-Creation-Date: 2012-03-01 13:23+0000\n"
+"PO-Revision-Date: 2012-03-01 13:23+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,13 +21,23 @@ msgid "Order Reference must be unique per Company!"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
+#: model:ir.model,name:stock_delivery_delays_working_days.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
 #: constraint:res.company:0
 msgid "Error! You can not create recursive companies."
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: field:delivery.carrier,delivery_lead_time:0
-msgid "Delivery Lead Time"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_stock_picking
+msgid "Picking List"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: sql_constraint:res.company:0
+msgid "The company name must be unique !"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
@@ -37,18 +47,33 @@ msgid "Error !"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_sale_order
-msgid "Sales Order"
-msgstr ""
-
-#. module: stock_delivery_delays_working_days
 #: model:ir.model,name:stock_delivery_delays_working_days.model_resource_calendar
 msgid "Resource Calendar"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: field:stock.picking,delivery_date:0
-msgid "Delivery Date"
+#: field:delivery.carrier,delivery_lead_time:0
+msgid "Delivery Lead Time"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:res.company:0
+msgid "Working Time"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:res.company:0
+msgid "Configuration"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: view:purchase.order:0
+msgid "Reception Expected Date"
+msgstr ""
+
+#. module: stock_delivery_delays_working_days
+#: constraint:product.template:0
+msgid "Error: The default UOM and the purchase UOM must be in the same category."
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
@@ -59,16 +84,6 @@ msgstr ""
 #. module: stock_delivery_delays_working_days
 #: model:ir.model,name:stock_delivery_delays_working_days.model_res_company
 msgid "Companies"
-msgstr ""
-
-#. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_purchase_order_line
-msgid "Purchase Order Line"
-msgstr ""
-
-#. module: stock_delivery_delays_working_days
-#: view:delivery.carrier:0
-msgid "Shipping Informations"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
@@ -83,8 +98,8 @@ msgid "Carrier Working time"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_procurement_order
-msgid "Procurement"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_product_template
+msgid "Product Template"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
@@ -98,23 +113,23 @@ msgid "Reference must be unique per Company!"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_stock_picking
-msgid "Picking List"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_procurement_order
+msgid "Procurement"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: sql_constraint:res.company:0
-msgid "The company name must be unique !"
+#: field:stock.picking,delivery_date:0
+msgid "Delivery Date"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: view:res.company:0
-msgid "Working Time"
+#: view:delivery.carrier:0
+msgid "Shipping Informations"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days
-#: view:res.company:0
-msgid "Configuration"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_sale_order
+msgid "Sales Order"
 msgstr ""
 
 #. module: stock_delivery_delays_working_days

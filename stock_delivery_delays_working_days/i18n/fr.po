@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1rc1\n"
+"Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-03 10:21+0000\n"
-"PO-Revision-Date: 2012-02-03 10:21+0000\n"
+"POT-Creation-Date: 2012-03-01 14:35+0000\n"
+"PO-Revision-Date: 2012-03-01 14:35+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,14 +31,14 @@ msgid "Error! You can not create recursive companies."
 msgstr "Error! You can not create recursive companies."
 
 #. module: stock_delivery_delays_working_days
-#: constraint:stock.move:0
-msgid "You must assign a production lot for this product"
-msgstr "Vous devez affecter un lot de fabrication à ce produit."
-
-#. module: stock_delivery_delays_working_days
 #: model:ir.model,name:stock_delivery_delays_working_days.model_stock_picking
 msgid "Picking List"
 msgstr "Bon de transfert"
+
+#. module: stock_delivery_delays_working_days
+#: sql_constraint:res.company:0
+msgid "The company name must be unique !"
+msgstr "The company name must be unique !"
 
 #. module: stock_delivery_delays_working_days
 #: code:addons/stock_delivery_delays_working_days/resource.py:47
@@ -52,29 +52,9 @@ msgid "Resource Calendar"
 msgstr "Calendrier de la ressource"
 
 #. module: stock_delivery_delays_working_days
-#: constraint:stock.move:0
-msgid "You try to assign a lot which is not from the same product"
-msgstr "Vous essayez d'affecter un lot qui n'est pas pour ce produit."
-
-#. module: stock_delivery_delays_working_days
-#: constraint:stock.move:0
-msgid "You can not move products from or to a location of the type view."
-msgstr "You can not move products from or to a location of the type view."
-
-#. module: stock_delivery_delays_working_days
 #: field:delivery.carrier,delivery_lead_time:0
 msgid "Delivery Lead Time"
 msgstr "Délai de livraison"
-
-#. module: stock_delivery_delays_working_days
-#: view:res.company:0
-msgid "Configuration"
-msgstr "Configuration"
-
-#. module: stock_delivery_delays_working_days
-#: sql_constraint:res.company:0
-msgid "The company name must be unique !"
-msgstr "The company name must be unique !"
 
 #. module: stock_delivery_delays_working_days
 #: view:res.company:0
@@ -82,7 +62,21 @@ msgid "Working Time"
 msgstr "Temps de travail"
 
 #. module: stock_delivery_delays_working_days
-#: help:stock.move,move_delivery_date:0
+#: view:res.company:0
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: stock_delivery_delays_working_days
+#: view:purchase.order:0
+msgid "Reception Expected Date"
+msgstr "Date de réception prévue"
+
+#. module: stock_delivery_delays_working_days
+#: constraint:product.template:0
+msgid "Error: The default UOM and the purchase UOM must be in the same category."
+msgstr "Erreur: l'UdM par défaut et l'UdM d'achat doivent appartenir à la même catégorie."
+
+#. module: stock_delivery_delays_working_days
 #: help:stock.picking,delivery_date:0
 msgid "Date of delivery to the customer"
 msgstr "Date de livraison chez le client"
@@ -104,9 +98,9 @@ msgid "Carrier Working time"
 msgstr "Temps de travail du transporteur"
 
 #. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_procurement_order
-msgid "Procurement"
-msgstr "Approvisionnement"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_product_template
+msgid "Product Template"
+msgstr "Modèle de produit"
 
 #. module: stock_delivery_delays_working_days
 #: model:ir.model,name:stock_delivery_delays_working_days.model_delivery_carrier
@@ -119,15 +113,14 @@ msgid "Reference must be unique per Company!"
 msgstr "Reference must be unique per Company!"
 
 #. module: stock_delivery_delays_working_days
-#: model:ir.model,name:stock_delivery_delays_working_days.model_stock_move
-msgid "Stock Move"
-msgstr "Mouvement de stock"
+#: model:ir.model,name:stock_delivery_delays_working_days.model_procurement_order
+msgid "Procurement"
+msgstr "Approvisionnement"
 
 #. module: stock_delivery_delays_working_days
-#: field:stock.move,move_delivery_date:0
 #: field:stock.picking,delivery_date:0
 msgid "Delivery Date"
-msgstr "Date de livraison"
+msgstr "Date de livraison prévue"
 
 #. module: stock_delivery_delays_working_days
 #: view:delivery.carrier:0
