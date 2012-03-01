@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1rc1\n"
+"Project-Id-Version: OpenERP Server 6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-02 14:59+0000\n"
-"PO-Revision-Date: 2012-02-02 14:59+0000\n"
+"POT-Creation-Date: 2012-03-01 14:33+0000\n"
+"PO-Revision-Date: 2012-03-01 14:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,7 @@ msgstr "Etes vous sûr de vouloir modifier ce produit ? Cela entrainera une modi
 #: field:stock.change.date.line,original_date_expected:0
 #: field:stock.move,original_date_expected:0
 msgid "Original Scheduled Date"
-msgstr "Date promise"
+msgstr "Date de réception promise"
 
 #. module: stock_delivery_delays_advanced
 #: constraint:stock.move:0
@@ -81,7 +81,7 @@ msgstr "Rupture fournisseur"
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,date_expected:0
 msgid "Scheduled Date"
-msgstr "Date prévue"
+msgstr "Date de réception prévue"
 
 #. module: stock_delivery_delays_advanced
 #: field:stock.change.date.line,product_id:0

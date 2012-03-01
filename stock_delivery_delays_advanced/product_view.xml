@@ -10,12 +10,26 @@
     
         <!-- INHERITED VIEW FOR THE OBJECT : product_supplierinfo -->
 
-		<record id="product_supplierinfo_view_form" model="ir.ui.view">
+		<record id="delivery_product_supplierinfo_view_form" model="ir.ui.view">
 			<field name="name">delivery_delays.product_supplierinfo.view_form</field>
 			<field name="model">product.supplierinfo</field>
 			<field name="inherit_id" ref="product.product_supplierinfo_form_view" />
             <field eval="30" name="priority"/>
 			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<data>
+					<field name="delay" position="after">
+						<field name="supplier_shortage" />
+					</field>
+				</data>
+			</field>
+		</record>
+		<record id="delivery_product_supplierinfo_view_tree" model="ir.ui.view">
+			<field name="name">delivery_delays.product_supplierinfo.view_tree</field>
+			<field name="model">product.supplierinfo</field>
+			<field name="inherit_id" ref="product.product_supplierinfo_tree_view" />
+            <field eval="30" name="priority"/>
+			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<data>
 					<field name="delay" position="after">
