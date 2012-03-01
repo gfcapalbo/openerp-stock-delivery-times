@@ -28,7 +28,7 @@ msgstr "Livraisons en retard"
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
 msgid "Reception Expected Date"
-msgstr "date de réception prévue"
+msgstr "Date de réception prévue"
 
 #. module: stock_delivery_delays_manager
 #: view:stock.picking:0
