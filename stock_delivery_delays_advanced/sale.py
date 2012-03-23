@@ -49,7 +49,7 @@ class sale_order_line(osv.osv):
         if order_lines != False and product:
             total_qty = 0
             for line_product in order_lines:
-                if line_product[2]['product_id'] == product:
+                if line_product[2] and line_product[2]['product_id'] == product:
                     total_qty += line_product[2]['product_uom_qty']
             total_qty = total_qty + qty
             info_product = self.pool.get('product.product').browse(cr, uid, product, context=context)
