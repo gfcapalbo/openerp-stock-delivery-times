@@ -28,7 +28,7 @@
     'description': """empty""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['sale','purchase_to_sale','stock_delivery_delays_working_days'], 
+    'depends': ['sale','purchase_to_sale','stock_delivery_times_working_days'], 
     'init_xml': [],
     'update_xml': [ 
            'stock_view.xml',
