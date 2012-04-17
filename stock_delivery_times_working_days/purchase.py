@@ -50,6 +50,7 @@ class purchase_order_line(osv.osv):
             seller_delay = seller.delay
         else:
             seller_delay = 0
+        start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
         date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, seller_delay, context=context)
         return date_planned
 
