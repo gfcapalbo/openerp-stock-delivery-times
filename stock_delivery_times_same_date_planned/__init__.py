@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    stock_delivery_delays_same_date_planned for OpenERP                                          #
+#    stock_delivery_times_same_date_planned for OpenERP                                          #
 #    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
