@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    stock_delivery_delays_manager for OpenERP                                          #
+#    stock_delivery_times_manager for OpenERP                                          #
 #    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
@@ -21,7 +21,7 @@
 
 
 {
-    'name': 'stock_delivery_delays_manager',
+    'name': 'stock_delivery_times_manager',
     'version': '0.1',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
