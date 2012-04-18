@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    stock_delivery_delays_reschedule for OpenERP                               #
+#    stock_delivery_times_reschedule for OpenERP                               #
 #    Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
@@ -21,7 +21,7 @@
 
 
 {
-    'name': 'stock_delivery_delais_recompute',
+    'name': 'stock_delivery_times_reschedule',
     'version': '0.1',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
