@@ -45,22 +45,18 @@ class sale_order_line(osv.osv):
         lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False, flag=False, context=None, order_lines=False):
         '''This method determine if there is enough stock for a sale order and calculate the corresponding delay''' 
         res= super(sale_order_line, self).product_id_change(cr, uid, ids, pricelist, product, qty,
-        uom, qty_uos, uos, name, partner_id, lang, update_tax, date_order, packaging, fiscal_position, flag, context=context)   
+        uom, qty_uos, uos, name, partner_id, lang, update_tax, date_order, packaging, fiscal_position, flag, context=context)
+        product_obj = self.pool.get('product.product')
         if order_lines != False and product:
             total_qty = 0
             for line_product in order_lines:
                 if line_product[2] and line_product[2]['product_id'] == product:
                     total_qty += line_product[2]['product_uom_qty']
             total_qty = total_qty + qty
-            info_product = self.pool.get('product.product').browse(cr, uid, product, context=context)
-            if (info_product.virtual_available - total_qty) >= 1: #TODO check is there is an incomming shipment for the product
-                res['value']['delay'] = info_product.sale_delay
-            elif info_product.seller_info_id.supplier_shortage:
-                #TODO use a different calendar for the supplier delay than the company calendar
-                res['value']['delay'] = info_product.sale_delay + (info_product.seller_info_id.delay or 0.0) 
-                res['value']['supplier_shortage'] = info_product.seller_info_id['supplier_shortage']
-            else:
-                res['value']['delay'] = (info_product.seller_info_id.delay or 0.0) + info_product.sale_delay
+            info_product = product_obj.browse(cr, uid, product, context=context)
+            delay, supplier_shortage = product_obj._get_delays(cr, uid, info_product, qty=(info_product.virtual_available - total_qty), context=context)
+            res['value']['delay'] = delay
+            res['value']['supplier_shortage'] = supplier_shortage
         return res
 
 sale_order_line()
