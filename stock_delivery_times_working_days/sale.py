@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    stock_delivery_times_working_days for OpenERP                                          #
+#    stock_delivery_times_working_days for OpenERP                              #
 #    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
@@ -44,7 +44,6 @@ class sale_order(osv.osv):
         start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
         date_planned = self.pool.get('resource.calendar')._get_date(cr, uid, None, start_date, line.delay, context=context)
         date_planned = (date_planned - timedelta(days=order.company_id.security_lead)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        
-        return date_planned  
+        return date_planned
 
 sale_order()
