@@ -64,17 +64,20 @@ class procurement_order(osv.osv):
     _defaults = {
     }
 
-    def _get_schedule_date(self, cr, uid, procurement, company, context=None): 
+    def _get_purchase_schedule_date(self, cr, uid, procurement, company, context=None): 
         '''This method overload the method _get_schedule_date in order to have a good calculation of the date'''
-        delay = -procurement.sale_order_line_id.product_id.sale_delay
+        if procurement.sale_order_line_id.product_id:
+            delay = -procurement.sale_order_line_id.product_id.sale_delay
+        else:
+            delay=0
         date_planned = datetime.strptime(procurement.date_planned, DEFAULT_SERVER_DATETIME_FORMAT)
         schedule_date = self.pool.get('resource.calendar')._get_date(cr, uid, None, date_planned, delay, context=context)
         schedule_date = (schedule_date - relativedelta(days=company.po_lead))
         return schedule_date
 
-    def _get_order_dates(self, cr, uid, schedule_date, seller_delay, context=None):
+    def _get_purchase_order_date(self, cr, uid, procurement, company, schedule_date, context=None):
         '''This method overload the method _get_order_dates in order to have a good calculation of the date'''
-        delay = -seller_delay
+        delay = - int(procurement.product_id.seller_delay)
         order_dates = self.pool.get('resource.calendar')._get_date(cr, uid, None, schedule_date, delay, context=context)
         return order_dates
 
