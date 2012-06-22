@@ -54,7 +54,7 @@ class sale_order_line(osv.osv):
                     total_qty += line_product[2]['product_uom_qty']
             total_qty = total_qty + qty
             info_product = product_obj.browse(cr, uid, product, context=context)
-            delay, supplier_shortage = product_obj._get_delays(cr, uid, info_product, qty=(info_product.virtual_available - total_qty), context=context)
+            delay, supplier_shortage = product_obj._get_delays(cr, uid, info_product, qty=total_qty, context=context)
             res['value']['delay'] = delay
             res['value']['supplier_shortage'] = supplier_shortage
         return res
