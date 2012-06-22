@@ -33,7 +33,6 @@
     'update_xml': [ 
            'stock_view.xml',
            'res_company_view.xml',
-           'sale_view.xml',
            'delivery_view.xml',
            'purchase_view.xml',
     ],
