@@ -61,7 +61,7 @@
         <record id="view_picking_in_search_late" model="ir.ui.view">
             <field name="name">delivery_delays.stock.picking.in.search</field>
             <field name="model">stock.picking</field>
-			<field name="inherit_id" ref="stock.view_picking_in_search" />
+	    <field name="inherit_id" ref="stock.view_picking_in_search" />
             <field eval="30" name="priority"/>
             <field name="type">search</field>
             <field name="arch" type="xml">
@@ -130,7 +130,7 @@
         <record id="view_picking_out_search_late" model="ir.ui.view">
             <field name="name">stock.picking.out.search</field>
             <field name="model">stock.picking</field>
-			<field name="inherit_id" ref="stock.view_picking_out_search" />
+	    <field name="inherit_id" ref="stock.view_picking_out_search" />
             <field eval="16" name="priority"/>
             <field name="type">search</field>
             <field name="arch" type="xml">
