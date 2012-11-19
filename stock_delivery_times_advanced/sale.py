@@ -32,12 +32,8 @@ class sale_order_line(osv.osv):
     
     _inherit = "sale.order.line"
     
-
     _columns = {
         'supplier_shortage':fields.date('Supplier Shortage'),
-    }
-
-    _defaults = {
     }
 
     def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
@@ -64,19 +60,13 @@ sale_order_line()
 class sale_order(osv.osv):
     
     _inherit = "sale.order"
-    
 
-    _columns = {
-    }
-
-    _defaults = {
-    }
-
-    def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
-        '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in function of the supplier_shortage'''
+    def _get_start_date(self, cr, uid, order, line, start_date, context=None):
+        '''This method overload the method _get_start_date to consider the supplier_shortage'''
+        start_date = super(sale_order, self)._get_start_date(cr, uid, order, line, start_date, context=context)
         if line.supplier_shortage:
             start_date = line.supplier_shortage
-        return super(sale_order, self)._get_date_planned(cr, uid, order, line, start_date, context=context)
+        return start_date
 
 sale_order()
 
