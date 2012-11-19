@@ -30,14 +30,8 @@ class product_supplierinfo(osv.osv):
     
     _inherit = "product.supplierinfo"
     
-
     _columns = {
         'supplier_shortage': fields.date('Supplier Shortage'),
-
-    }
-
-    _defaults = {
-
     }
 
     def run_supplier_shortage_scheduler(self, cr, uid, context=None):
@@ -54,16 +48,17 @@ class product_product(osv.osv):
     def _get_delays(self, cr, uid, product, qty=1, context=None):
         '''Compute the delay information for a product'''
         supplier_shortage = False
-        if product.is_direct_delivery_from_product:
-            delay = (product.seller_info_id.delay or 0.0)
+        #TODO fix me, purchase_to_sale is not a dependency
+        #if product.is_direct_delivery_from_product:
+        #    delay = (product.seller_info_id.delay or 0.0)
         #TODO this should be parametable using immediately_usable_qty or virtual_qty think about it
-        elif (product.immediately_usable_qty - qty) >= 0: #TODO check is there is an incomming shipment for the product
+        if (product.immediately_usable_qty - qty) >= 0: #TODO check is there is an incomming shipment for the product
             delay = product.sale_delay
         else:
             delay = (product.seller_info_id.delay or 0.0) + product.sale_delay
-        if product.seller_info_id.supplier_shortage:
-            #TODO use a different calendar for the supplier delay than the company calendar
-            supplier_shortage = product.seller_info_id['supplier_shortage']
+            if product.seller_info_id.supplier_shortage:
+                #TODO use a different calendar for the supplier delay than the company calendar
+                supplier_shortage = product.seller_info_id['supplier_shortage']
         #add purchase lead time
         delay += product.company_id.po_lead
         return delay, supplier_shortage
