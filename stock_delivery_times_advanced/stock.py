@@ -39,12 +39,6 @@ class stock_move(osv.osv):
 class stock_picking(osv.osv):
     _inherit = "stock.picking"
 
-    _columns = {
-    }
-
-    _defaults = {
-    }
-
     def change_expected_date(self, cr, uid, ids, context=None):
         if context is None: context = {}
         context = dict(context, active_ids=ids, active_model=self._name)
