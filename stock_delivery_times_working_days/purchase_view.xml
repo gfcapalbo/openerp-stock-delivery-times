@@ -24,6 +24,9 @@
                     <xpath expr="/form/notebook/page/group/field[@name='minimum_planned_date']" position="replace">
                         <field name="minimum_planned_date" string="Reception Expected Date"/>
                     </xpath>
+               <!--     <xpath expr="/form/notebook/page/group/button[@name='purchase_confirm']" position="before">
+                        <button name="recompute_order_line_dates" states="draft" string="Recompute planned dates" type="object" icon="gtk-ok" attrs="{'invisible':[('company_id.date_autorecompute','=', True)]}"/>
+                    </xpath> -->
                 </data>
             </field>
         </record>

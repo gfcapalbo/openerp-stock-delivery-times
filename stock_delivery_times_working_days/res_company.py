@@ -28,9 +28,12 @@ class res_company(osv.osv):
 
     _columns = {
         'calendar_id': fields.many2one("resource.calendar", "Company Working time"),
+        'sale_start_date': fields.selection([('order_date', 'Order date'),('confirm_date', 'Confirmation date')],'Sale start date', help="Select the date you want to start for the calculation of the date planned for the pickings"),
+        'date_autorecompute': fields.boolean('Date auto-recompute', help="If true the planned date of the purchase order will be automaticaly recompute when approving the purchase order"),
     }
 
     _defautls = {
+        'sale_start_date': 'order_date',
     }
 
 res_company()
