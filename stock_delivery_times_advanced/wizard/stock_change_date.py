@@ -90,19 +90,24 @@ class stock_change_date(osv.osv_memory):
         stock_picking = self.pool.get('stock.picking')
         stock_move = self.pool.get('stock.move')
         product_supplierinfo = self.pool.get('product.supplierinfo')
+        po_line_obj = self.pool.get('purchase.order.line')
         change = self.browse(cr, uid, ids[0], context=context)
         picking_type = change.picking_id.type
         change_data = {}
         for move in change.move_ids:
             move_id = move.move_id.id
             if move.new_date_expected:
-                move_id = stock_move.write(cr,uid, move_id, {
-                                                        'date_expected' : move.new_date_expected,
+                stock_move.write(cr,uid, move_id, {'date_expected' : move.new_date_expected,
                                                         },context=context)
+                purchase_line_id = po_line_obj.search(cr, uid, [
+                                                        ('product_id', '=', move.product_id.id),
+                                                        ('order_id', '=', change.picking_id.purchase_id.id)
+                                                        ], context=context)
+                po_line_obj.write(cr, uid, purchase_line_id, {'date_planned': move.new_date_expected}, context=context)
             if move.change_supplier_shortage:
                 supplierinfo_id = product_supplierinfo.search(cr, uid, [
                                                                     ('product_id', '=', move.product_id.id),
-                                                                    ('name', '=', change.picking_id.partner_id.id)
+                                                                    ('name', '=', change.picking_id.supplier_id.id)
                                                                     ], context=context)
                 if not supplierinfo_id:
                     raise osv.except_osv(_('Error !'), _('You need to define a supplierinfo for this product !'))
@@ -124,12 +129,11 @@ class stock_change_date(osv.osv_memory):
                                                     'date_expected' : date_expected,
                                                     'supplier_shortage' : move.supplier_shortage,
                                                     }, context=context)
-
+            
             change_data['move%s' % (move_id)] = {
                 'product_id': move.product_id.id,
                 'date_expected' : move.new_date_expected,
                 }
-
         #stock_picking.do_change(cr, uid, [move.picking_id.id], change_data, context=context)
         return {'type': 'ir.actions.act_window_close'}
 
