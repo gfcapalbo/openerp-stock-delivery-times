@@ -78,7 +78,7 @@ class stock_picking(osv.osv):
     def action_confirm(self, cr, uid, ids, context=None):
         '''This method add the original date at the creation of the picking, this date will not be modified after'''
         res = super(stock_picking, self).action_confirm(cr, uid, ids, context=context)
-        #TODO maybe it's should me good to can decide if original_date is the min or the max date create a "delivery_settings" to choose this kind of settings
+        #TODO maybe it's should be good to be able to decide if original_date is the min or the max date create a "delivery_settings" to choose this kind of settings
         for picking in self.read(cr, uid, ids, ['max_date','original_date'], context=context):
             if not picking['original_date']:
                 picking['original_date'] = picking['max_date']
@@ -94,17 +94,8 @@ class stock_picking(osv.osv):
             new_picking_state = False
             if not late_picking.purchase_id:
                 for line in late_picking.move_lines:
-                    qty = line.product_id.incoming_qty + line.product_id.outgoing_qty
-                    if qty < 0:
-                        #other_line_ids = move_obj.search(cr, uid, [
-                        #                                    ('product_id', '=', line.product_id.id),
-                        #                                    ('state', 'in', ['waiting', 'confirmed'])
-                        #                                    ], context=context)
-                        #incoming_number = 0
-                        #for other_line in move_obj.browse(cr, uid, other_line_ids, context=context):
-                        #    if other_line.picking_id.state in ['confirmed', 'assigned'] and other_line.picking_id.type == 'in' and other_line.picking_id.sale_flow != u'direct_delivery':
-                        #        incoming_number += other_line.product_qty
-                        #if incoming_number < line.product_id.immediately_usable_qty:
+                    qty = line.product_id.real_incoming_qty + line.product_id.outgoing_qty
+                    if qty < 0 and line.state in ['waiting', 'confirmed']:
                         new_picking_state = True
                         break
             if picking_state != new_picking_state:
@@ -122,7 +113,7 @@ class stock_picking(osv.osv):
                                                 ('type', '=', 'out'),
                                             ], context=context)
         #done order don't have to be to ordered
-        to_order_done_ids = self.search(cr, uid, [('state', '=', 'done'),('to_order', '=', True)], context=context)
+        to_order_done_ids = self.search(cr, uid, [('state', 'in', ['done', 'cancel']),('to_order', '=', True)], context=context)
         #TODO add parameter to choose when the picking is late 
         to_not_order, to_order = self._get_to_order_picking(cr, uid, late_pickings, context=context)
         to_not_order += to_order_done_ids
