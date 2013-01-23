@@ -108,12 +108,14 @@ class stock_picking(osv.osv):
     def run_late_without_availability_scheduler(self, cr, uid, context=None):
         yesterday = (datetime.now()-timedelta(days=1)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         late_pickings = self.search(cr, uid, [
-                                                ('max_date', '<', yesterday),
+                                                ('max_date', '<=', yesterday),
                                                 ('state', 'in', ['confirmed', 'assigned']),
                                                 ('type', '=', 'out'),
                                             ], context=context)
         #done order don't have to be to ordered
-        to_order_done_ids = self.search(cr, uid, [('state', 'in', ['done', 'cancel']),('to_order', '=', True)], context=context)
+        to_order_done_ids = self.search(cr, uid, ['|',('state', 'in', ['done', 'cancel']),
+                                                  ('max_date', '>', yesterday),
+                                                  ('to_order', '=', True)], context=context)
         #TODO add parameter to choose when the picking is late 
         to_not_order, to_order = self._get_to_order_picking(cr, uid, late_pickings, context=context)
         to_not_order += to_order_done_ids
