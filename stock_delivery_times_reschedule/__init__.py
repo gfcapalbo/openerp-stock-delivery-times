@@ -24,6 +24,7 @@ import procurement
 import scheduler
 import company
 import product
+import sale
 
 
 

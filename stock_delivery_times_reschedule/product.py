@@ -28,7 +28,7 @@ class product_product(osv.osv):
     _inherit = "product.product"
 
 
-    def get_incomming_qty(self, cr, uid, ids, product_to_procurement, company_id, context=None):
+    def get_incomming_qty(self, cr, uid, ids, product_id_to_procurement_ids, company_id, context=None):
         """
         return a dictionnary of value that represent for each product the incomming stock planned by date
         """
@@ -41,73 +41,91 @@ class product_product(osv.osv):
             location_ids.append(warehouse.lot_stock_id.id)
 
         incomming_move_ids = move_obj.search(cr, uid, [
-                                ['state', 'in', ['wating', 'confirmed', 'assigned']],
+                                ['state', 'in', ['waiting', 'confirmed', 'assigned']],
                                 ['location_id', 'not in', location_ids],
                                 ['location_dest_id', 'in', location_ids],
                                 ['product_id', 'in', ids]
                             ], context=context)
 
         #TODO it will be great to test this module using uom and uos to check if everything work correctly
-        incomming_move = move_obj.read(cr, uid, incomming_move_ids, ['product_qty', 'product_id', 'date_expected'], context=context)
+        incomming_move = move_obj.read(cr, uid, incomming_move_ids,
+                                       ['product_qty', 'product_id', 'date_expected'],
+                                       context=context)
 
         product_to_qty_dict = defaultdict(lambda : defaultdict(float))
         for move in incomming_move:
             product_to_qty_dict[move['product_id'][0]][move['date_expected']] += move['product_qty']
         
         product_to_qty_list = {}
-        for product_id in product_to_qty_dict:
-            product_to_qty_list[product_id] = product_to_qty_dict[product_id].items()
-            product_to_qty_list[product_id].sort()
+        for product_id in ids:
+            if product_id in product_to_qty_dict:
+                product_to_qty_list[product_id] = product_to_qty_dict[product_id].items()
+                product_to_qty_list[product_id].sort()
+            else:
+                product_to_qty_list[product_id] = []
         return product_to_qty_list
 
 
-    def get_reschedule_date(self, cr, uid, ids, product_to_procurement, company_id, context=None):
+    def _get_reschedule_date(self, cr, uid, ids, product_id_to_procurement_ids, company_id, context=None):
         move_obj = self.pool.get('stock.move')
-        product_qty_available = self._product_available(cr, uid, ids, field_names=['qty_available'], arg=False, context=context)
+        product_qty_available = self._product_available(cr, uid, ids,
+                                                        field_names=['qty_available'], arg=False, context=context)
         for id in product_qty_available:
             product_qty_available[id] = product_qty_available[id]['qty_available']
 
-        product_to_qty = self.get_incomming_qty(cr, uid, ids, product_to_procurement, company_id, context=context)
+        product_id_to_qty = self.get_incomming_qty(cr, uid, ids,
+                                                   product_id_to_procurement_ids, company_id, context=context)
 
-        procurement_ids = [procurement_id for product_id in product_to_procurement for procurement_id in product_to_procurement[product_id]]
+        procurement_ids = []
+        for product_id in product_id_to_procurement_ids:
+            for procurement_id in product_id_to_procurement_ids[product_id]:
+                procurement_ids.append(procurement_id)
+
         procurement_to_qty = {}
-        for procurement in self.pool.get('procurement.order').read(cr, uid, procurement_ids, ['product_qty'], context=context):
+        for procurement in self.pool.get('procurement.order').read(cr, uid,
+                                                                   procurement_ids, ['product_qty'], context=context):
             procurement_to_qty[procurement['id']] = procurement['product_qty']
         
         procurement_id_to_date = {}
         for id in ids:
-            date, incomming_qty = product_to_qty[id].pop()
-            qty_available = product_qty_available[id] + incomming_qty
-            procurement_id = product_to_procurement[id].pop()
-            qty_needed = procurement_to_qty[procurement_id]
-            while True:
-                if qty_available >= qty_needed:
-                    procurement_id_to_date[procurement_id] = date
-                    if not product_to_procurement[id]:
-                        #there is not more procurement to compute for this product => let's do the next product
-                        break
-                    procurement_id = product_to_procurement[id].pop()
-                    #attention le product_to_procurement peu etre vide
-                    qty_needed += procurement_to_qty[procurement_id]
-                else:
-                    if not product_to_qty[id]:
-                        #there is no more incomming product, the next procurement can not be re-scheduled
-                        break
-                    date, incomming_qty = product_to_qty[id].pop()
-                    qty_available += incomming_qty
+            if product_id_to_qty[id]:
+                date, incomming_qty = product_id_to_qty[id].pop()
+                qty_available = product_qty_available[id] + incomming_qty
+                procurement_id = product_id_to_procurement_ids[id].pop()
+                qty_needed = procurement_to_qty[procurement_id]
+                while True:
+                    if qty_available >= qty_needed:
+                        procurement_id_to_date[procurement_id] = date
+                        if not product_id_to_procurement_ids[id]:
+                            #there is not more procurement to compute for this product => let's do the next product
+                            break
+                        procurement_id = product_id_to_procurement_ids[id].pop()
+                        #attention le product_id_to_procurement_ids peu etre vide
+                        qty_needed += procurement_to_qty[procurement_id]
+                    else:
+                        if not product_id_to_qty[id]:
+                            #there is no more incomming product, the next procurement can not be re-scheduled
+                            break
+                        date, incomming_qty = product_id_to_qty[id].pop()
+                        qty_available += incomming_qty
+            else:
+                #i don't do anything if no incoming for the product
+                continue
         print 'procurement_id_to_date', procurement_id_to_date
         return procurement_id_to_date
 
-    def get_related_procurement(self, cr, uid, ids, maxdate, company_id, context=None):
-        result = {}
+    def _get_related_procurement(self, cr, uid, ids, maxdate, company_id, context=None):
+        result = defaultdict(list)
         procurement_obj = self.pool.get('procurement.order')
         #TODO be carefull with the procurement order, maybe it will be great to add a field 'orignal date'
-        procurement_ids = procurement_obj.search(cr, uid, [['company_id', '=', company_id], ['state', '=', 'exception'], ['date_planned', '<=', maxdate], ['product_id', 'in', ids]], context=context)
+        procurement_ids = procurement_obj.search(cr, uid, [
+                            ['company_id', '=', company_id],
+                            ['state', '=', 'exception'],
+                            ['date_planned', '<=', maxdate],
+                            ['product_id', 'in', ids]
+                            ], context=context)
         for procurement in procurement_obj.read(cr, uid, procurement_ids, ['product_id'], context=context):
-             if result.get(procurement['product_id']):
-                result[procurement['product_id'][0]].append(procurement['id'])
-             else:
-                result[procurement['product_id'][0]] = [procurement['id']]
+            result[procurement['product_id'][0]].append(procurement['id'])
         return result
 
 
@@ -118,14 +136,48 @@ class product_product(osv.osv):
         if not company_id:
             user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
             company_id = user.company_id.id
-        product_to_procurement = self.get_related_procurement(cr, uid, ids, maxdate, company_id, context=context)
-        print "product_to_procurement", product_to_procurement, ids
-        procurement_recomputed_date = self.get_reschedule_date(cr, uid, ids, product_to_procurement, company_id, context=context)
+        product_id_to_procurement_ids = self._get_related_procurement(cr, uid, ids, maxdate, company_id, context=context)
+        print "product_id_to_procurement_ids", product_id_to_procurement_ids, ids
+        procurement_recomputed_date = self._get_reschedule_date(cr, uid, ids,
+                                                               product_id_to_procurement_ids, company_id, context=context)
         procurement_obj = self.pool.get('procurement.order')
         for procurement_id in procurement_recomputed_date:
             ctx = context.copy()
-            ctx['do_not_trigger'] = True
-            procurement_obj.write(cr, uid, procurement_id, {'date_planned': procurement_recomputed_date[procurement_id]}, context=ctx)
+            ctx['do_not_trigger'] = True #todo fix
+            procurement_obj.write(cr, uid, procurement_id, {
+                                            'date_planned': procurement_recomputed_date[procurement_id]
+                                            }, context=ctx)
         return True
+    
+    def _get_product_ids_to_recompute(self, cr, uid, maxdate, company, context=None):
+        procurement_obj = self.pool.get('procurement.order')
+        procurement_ids = procurement_obj.search(cr, uid, [
+                                                            ('company_id', '=', company.id),
+                                                            ('not_enough_stock', '=', True),
+                                                            ('state', '=', 'exception'),
+                                                            ('date_planned', '<=', maxdate)
+                                                            ], context=context)
+        date_to_product = defaultdict(list)
+        product_and_date_to_qty = defaultdict(lambda : defaultdict(float))
+        product_ids_to_recompute = []
+        for procurement in procurement_obj.browse(cr, uid, procurement_ids, context=context):
+            product_id = procurement.product_id.id
+            date_to_product[procurement.date_planned].append(product_id)
+            product_and_date_to_qty[product_id][procurement.date_planned] += procurement.product_qty
+        ctx = context.copy() #As the context will be use latter with the same function _product_available
+                             #it's better to not polluate the main context
+        print date_to_product
+        for date in date_to_product:
+            ctx.update({'to_date': date})
+            products_qty = self._product_available(cr, uid, date_to_product[date],
+                                                          field_names=['virtual_available'],
+                                                          arg=False, context=ctx)
+            print products_qty, date
+            for product_id in products_qty:
+                print 'date, product_id, virtual_available', date, product_id, products_qty[product_id]['virtual_available']
+                #TODO fix me we should compare this qty with the qty of the procurement
+                if not product_id in product_ids_to_recompute and products_qty[product_id]['virtual_available'] < product_and_date_to_qty[product_id][date]:
+                    product_ids_to_recompute.append(product_id)
+        return product_ids_to_recompute
 
 product_product()

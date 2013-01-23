@@ -59,13 +59,17 @@ class procurement_order(osv.osv):
         self.write(cr, uid, ids, {'not_enough_stock': False}, context=context)
         return True
 
+    def _prepare_query(self, cr, uid, procurement, order_point_id, ok, context=None):
+        return 'update procurement_order set not_enough_stock=%s, message=%s where id=%s'
 
-    def _prepare_procurement_message(self, cr, uid, procurement, order_point_id, ok, context=None):
-        vals = super(procurement_order, self)._prepare_procurement_message(cr, uid, procurement, order_point_id, ok, context=context)
+    def _prepare_params(self, cr, uid, procurement, order_point_id, ok, context=None):
+        params = super(procurement_order, self)._prepare_params(cr, uid, procurement, order_point_id, ok, context=context)
         if order_point_id and not ok:
-            vals.update({'not_enough_stock': True})
-        return vals
-
+            not_enough_stock = True
+        else:
+            not_enough_stock = False
+        params = (not_enough_stock,) + params
+        return params
 
 procurement_order()
 
