@@ -43,11 +43,14 @@ class sale_order_line(osv.osv):
         res= super(sale_order_line, self).product_id_change(cr, uid, ids, pricelist, product, qty,
         uom, qty_uos, uos, name, partner_id, lang, update_tax, date_order, packaging, fiscal_position, flag, context=context)
         product_obj = self.pool.get('product.product')
-        if order_lines != False and product:
+        if product:
             total_qty = 0
-            for line_product in order_lines:
-                if line_product[2] and line_product[2]['product_id'] == product:
-                    total_qty += line_product[2]['product_uom_qty']
+            if context.get('parent') and context.get('parent').get('id'):
+                order = self.pool.get('sale.order').browse(cr, uid, context.get('parent').get('id'), context=context)
+                for line_product in order.order_line:
+                    #import pdb; pdb.set_trace()
+                    if line_product.product_id.id == product and ids and line_product.id != ids[0]:
+                        total_qty += line_product.product_uom_qty
             total_qty = total_qty + qty
             info_product = product_obj.browse(cr, uid, product, context=context)
             delay, supplier_shortage = product_obj._get_delays(cr, uid, info_product, qty=total_qty, context=context)
