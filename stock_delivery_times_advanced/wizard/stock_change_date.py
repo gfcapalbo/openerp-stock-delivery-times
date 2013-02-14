@@ -106,7 +106,6 @@ class stock_change_date(osv.osv_memory):
                                                         ], context=context)
                 po_line_obj.write(cr, uid, purchase_line_id, {
                                         'date_planned': move.new_date_expected,
-                                        'date': move.new_date_expected
                                         }, context=context)
             if move.change_supplier_shortage:
                 supplierinfo_id = supinfo_obj.search(cr, uid, [
@@ -133,6 +132,7 @@ class stock_change_date(osv.osv_memory):
                         move_lines.append(move_id)
                     stock_move.write(cr, uid, move_lines, {
                                                     'date_expected' : date_expected,
+                                                    'date' : date_expected,
                                                     'supplier_shortage' : move.supplier_shortage,
                                                     }, context=context)
 
