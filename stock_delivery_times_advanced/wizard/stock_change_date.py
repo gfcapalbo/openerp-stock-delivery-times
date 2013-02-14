@@ -98,7 +98,9 @@ class stock_change_date(osv.osv_memory):
         for move in change.move_ids:
             move_id = move.move_id.id
             if move.new_date_expected:
-                stock_move.write(cr,uid, move_id, {'date_expected' : move.new_date_expected,
+                stock_move.write(cr,uid, move_id, {
+                                                    'date_expected' : move.new_date_expected,
+                                                    'date' : move.new_date_expected,
                                                         },context=context)
                 purchase_line_id = po_line_obj.search(cr, uid, [
                                                         ('product_id', '=', move.product_id.id),
