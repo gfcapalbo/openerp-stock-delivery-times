@@ -29,16 +29,16 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class stock_picking(osv.osv):
 
-    
+
     _inherit = "stock.picking"
-    
+
     def _get_picking_from_stock_move(self, cr, uid, ids, context=None):
         res = self.pool.get('stock.picking').search(cr, uid, [('move_lines', 'in', ids)], context=context)
         return res
 
     def get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
         return self._get_min_max_date(cr, uid, ids, field_name, arg, context=context)
-    
+
     def _get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
         res = super(stock_picking, self)._get_min_max_date(cr, uid, ids, field_name, arg, context=context)
         for picking in self.browse(cr, uid, ids, context=context):
@@ -84,40 +84,40 @@ class stock_picking(osv.osv):
                 picking['original_date'] = picking['max_date']
                 self.write(cr, uid, picking['id'], {'original_date' : picking['max_date']}, context=context)
         return res
-    
+
     def _get_to_order_picking(self, cr, uid, ids, context=None):
         move_obj = self.pool.get('stock.move')
         to_order = []
         to_not_order = []
-        for late_picking in self.browse(cr, uid, ids, context=context):
-            picking_state = late_picking.to_order
+        for started_picking in self.browse(cr, uid, ids, context=context):
+            picking_state = started_picking.to_order
             new_picking_state = False
-            if not late_picking.purchase_id:
-                for line in late_picking.move_lines:
+            if not started_picking.purchase_id:
+                for line in started_picking.move_lines:
                     qty = line.product_id.real_incoming_qty + line.product_id.outgoing_qty
                     if qty < 0 and line.state in ['waiting', 'confirmed']:
                         new_picking_state = True
                         break
             if picking_state != new_picking_state:
                 if new_picking_state == True:
-                    to_order.append(late_picking.id)
-                else: 
-                    to_not_order.append(late_picking.id)
+                    to_order.append(started_picking.id)
+                else:
+                    to_not_order.append(started_picking.id)
         return to_not_order, to_order
 
     def run_late_without_availability_scheduler(self, cr, uid, context=None):
-        yesterday = (datetime.now()-timedelta(days=1)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        late_pickings = self.search(cr, uid, [
-                                                ('max_date', '<=', yesterday),
-                                                ('state', 'in', ['confirmed', 'assigned']),
-                                                ('type', '=', 'out'),
-                                            ], context=context)
+        started_pickings = self.search(cr, uid,
+                                    [('state', 'in', ['confirmed', 'assigned']),
+                                     ('type', '=', 'out'),
+                                    ], context=context)
         #done order don't have to be to ordered
-        to_order_done_ids = self.search(cr, uid, ['|',('state', 'in', ['done', 'cancel']),
-                                                  ('max_date', '>', yesterday),
-                                                  ('to_order', '=', True)], context=context)
-        #TODO add parameter to choose when the picking is late 
-        to_not_order, to_order = self._get_to_order_picking(cr, uid, late_pickings, context=context)
+        to_order_done_ids = self.search(cr, uid,
+                                        ['|',
+                                         ('state', 'in', ['done', 'cancel']),
+                                         ('to_order', '=', True)], context=context)
+        #TODO add parameter to choose when the picking is late
+        print started_pickings
+        to_not_order, to_order = self._get_to_order_picking(cr, uid, started_pickings, context=context)
         to_not_order += to_order_done_ids
         self.write(cr, uid, to_not_order, {'to_order' : False}, context=context)
         self.write(cr, uid, to_order, {'to_order' : True}, context=context)
@@ -125,4 +125,3 @@ class stock_picking(osv.osv):
 
 
 stock_picking()
-

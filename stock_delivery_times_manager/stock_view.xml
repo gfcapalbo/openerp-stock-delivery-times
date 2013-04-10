@@ -7,7 +7,7 @@
 
 <openerp>
     <data>
-    
+
         <!-- INHERITED VIEW FOR THE OBJECT : incoming shipments -->
 
 
@@ -35,7 +35,7 @@
                         <field name="date_expected" string="Reception Expected Date" on_change="onchange_date(date,date_expected)"/>
                     </xpath>
                 </data>
-            </field>                    
+            </field>
         </record>
 
         <record id="view_picking_in_tree_max" model="ir.ui.view">
@@ -99,7 +99,7 @@
                         <field name="date_expected" string="Shipping Expected Date" on_change="onchange_date(date,date_expected)"/>
                     </xpath>
                 </data>
-            </field>                    
+            </field>
         </record>
 
         <record id="view_picking_out_tree_max" model="ir.ui.view">
@@ -142,7 +142,7 @@
                 </data>
             </field>
         </record>
-    
+
 
 
 
