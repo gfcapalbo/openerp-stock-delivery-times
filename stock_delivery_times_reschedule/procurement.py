@@ -26,7 +26,7 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class procurement_order(osv.osv):
-    
+
     _inherit = "procurement.order"
 
     _columns = {
@@ -41,7 +41,7 @@ class procurement_order(osv.osv):
     def _get_stock_move_date(self, cr, uid, procurement, context=None):
         start_date = datetime.strptime(procurement.date_planned, DEFAULT_SERVER_DATETIME_FORMAT)
         return self.pool.get('resource.calendar')._get_date(cr, uid, procurement.company_id.calendar_id.id, start_date, procurement.product_id.sale_delay, context=context)
-    
+
     def write(self, cr, uid, ids, vals, context=None):
         #If the expected date of the procurement is changed the stock move should be impacted
         res = super(procurement_order, self).write(cr, uid, ids, vals, context=context)
@@ -72,4 +72,3 @@ class procurement_order(osv.osv):
         return params
 
 procurement_order()
-

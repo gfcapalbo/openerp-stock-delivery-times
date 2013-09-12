@@ -25,7 +25,7 @@ from tools.translate import _
 
 class stock_move(osv.osv):
     _inherit = "stock.move"
-    
+
     _columns = {
         'supplier_shortage': fields.date('Supplier Shortage'),
         'original_date_expected':fields.datetime('Original Scheduled Date'),

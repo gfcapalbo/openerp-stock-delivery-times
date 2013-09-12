@@ -71,4 +71,3 @@ class procurement_order(osv.osv):
         return True
 
 procurement_order()
-

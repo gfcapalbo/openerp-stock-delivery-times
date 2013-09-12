@@ -24,7 +24,7 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 from collections import defaultdict
 
 class product_product(osv.osv):
-    
+
     _inherit = "product.product"
 
 
@@ -55,7 +55,7 @@ class product_product(osv.osv):
         product_to_qty_dict = defaultdict(lambda : defaultdict(float))
         for move in incomming_move:
             product_to_qty_dict[move['product_id'][0]][move['date_expected']] += move['product_qty']
-        
+
         product_to_qty_list = {}
         for product_id in ids:
             if product_id in product_to_qty_dict:
@@ -85,7 +85,7 @@ class product_product(osv.osv):
         for procurement in self.pool.get('procurement.order').read(cr, uid,
                                                                    procurement_ids, ['product_qty'], context=context):
             procurement_to_qty[procurement['id']] = procurement['product_qty']
-        
+
         procurement_id_to_date = {}
         for id in ids:
             if product_id_to_qty[id]:
@@ -148,7 +148,7 @@ class product_product(osv.osv):
                                             'date_planned': procurement_recomputed_date[procurement_id]
                                             }, context=ctx)
         return True
-    
+
     def _get_product_ids_to_recompute(self, cr, uid, maxdate, company, context=None):
         procurement_obj = self.pool.get('procurement.order')
         procurement_ids = procurement_obj.search(cr, uid, [

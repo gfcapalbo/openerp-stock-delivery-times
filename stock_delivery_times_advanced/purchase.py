@@ -29,9 +29,9 @@ from tools.translate import _
 from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class purchase_order_line(osv.osv):
-    
+
     _inherit = "purchase.order.line"
-    
+
     def _get_date_planned(self, cr, uid, seller, start_date, context=None):
         '''This method overload the method _get_date_planned and use the method get_date to consider the working days, and change the start date in function of the supplier_shortage'''
         if seller and seller.supplier_shortage:

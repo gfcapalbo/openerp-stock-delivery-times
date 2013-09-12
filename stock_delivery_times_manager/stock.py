@@ -116,7 +116,6 @@ class stock_picking(osv.osv):
                                          ('state', 'in', ['done', 'cancel']),
                                          ('to_order', '=', True)], context=context)
         #TODO add parameter to choose when the picking is late
-        print started_pickings
         to_not_order, to_order = self._get_to_order_picking(cr, uid, started_pickings, context=context)
         to_not_order += to_order_done_ids
         self.write(cr, uid, to_not_order, {'to_order' : False}, context=context)
