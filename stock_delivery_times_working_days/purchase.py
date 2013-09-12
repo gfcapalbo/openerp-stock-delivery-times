@@ -80,7 +80,7 @@ class procurement_order(osv.osv):
 
     _inherit = 'procurement.order'
 
-    def _get_purchase_schedule_date(self, cr, uid, procurement, context=None): 
+    def _get_purchase_schedule_date(self, cr, uid, procurement, company, context=None): 
         '''This method overload the method _get_schedule_date in order to have a good calculation of the date'''
         if procurement.sale_order_line_id.product_id:
             delay = -procurement.sale_order_line_id.product_id.sale_delay
@@ -91,7 +91,7 @@ class procurement_order(osv.osv):
         schedule_date = (schedule_date - relativedelta(days=procurement.company_id.po_lead))
         return schedule_date
 
-    def _get_purchase_order_date(self, cr, uid, procurement, schedule_date, context=None):
+    def _get_purchase_order_date(self, cr, uid, procurement, company, schedule_date, context=None):
         '''This method overload the method _get_order_dates in order to have a good calculation of the date'''
         delay = - int(procurement.product_id.seller_delay)
         order_dates = self.pool.get('resource.calendar')._get_date(cr, uid, None, schedule_date, delay, context=context)
