@@ -112,8 +112,7 @@ class stock_picking(osv.osv):
                                     ], context=context)
         #done order don't have to be to ordered
         to_order_done_ids = self.search(cr, uid,
-                                        ['|',
-                                         ('state', 'in', ['done', 'cancel']),
+                                        [('state', 'in', ['done', 'cancel']),
                                          ('to_order', '=', True)], context=context)
         #TODO add parameter to choose when the picking is late
         to_not_order, to_order = self._get_to_order_picking(cr, uid, started_pickings, context=context)
