@@ -41,7 +41,8 @@ class stock_picking(orm.Model):
                                               start_date,
                                               picking.carrier_id.delivery_lead_time,
                                               context=context)
-        return delivery_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            delivery_date = delivery_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        return delivery_date
 
     def _get_min_max_date(self, cr, uid, ids, field_name, arg, context=None):
         res = super(stock_picking, self)._get_min_max_date(
