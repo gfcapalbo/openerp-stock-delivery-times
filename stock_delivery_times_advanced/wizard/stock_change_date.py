@@ -1,66 +1,78 @@
-# -*- encoding: utf-8 -*-
-#################################################################################
-#                                                                               #
-#    stock_delivery_times_advanced for OpenERP                                          #
-#    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
-#                                                                               #
-#    This program is free software: you can redistribute it and/or modify       #
-#    it under the terms of the GNU Affero General Public License as             #
-#    published by the Free Software Foundation, either version 3 of the         #
-#    License, or (at your option) any later version.                            #
-#                                                                               #
-#    This program is distributed in the hope that it will be useful,            #
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of             #
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
-#    GNU Affero General Public License for more details.                        #
-#                                                                               #
-#    You should have received a copy of the GNU Affero General Public License   #
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.      #
-#                                                                               #
-#################################################################################
+# -*- coding: utf-8 -*-
+###############################################################################
+#
+#    stock_delivery_times_advanced for OpenERP
+#    Copyright (C) 2011-2014 Akretion
+#    Author: Benoît Guillot <benoit.guillot@akretion.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+from openerp.osv import orm, fields
+from datetime import datetime
+from openerp.tools.translate import _
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
-from osv import osv, fields
-import netsvc
-from datetime import date
-from datetime import timedelta, datetime
-from tools.translate import _
-from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
-class stock_change_date_line(osv.TransientModel):
+class stock_change_date_line(orm.TransientModel):
     _name = "stock.change.date.line"
     _rec_name = 'product_id'
     _columns = {
-        'product_id' : fields.many2one('product.product', string="Product", required=True, readonly=True),
+        'product_id': fields.many2one(
+            'product.product',
+            string="Product",
+            required=True,
+            readonly=True),
         'supplier_shortage': fields.date('Supplier Shortage'),
-        'date_expected': fields.datetime('Scheduled Date', required=True, readonly=True),
-        'move_id' : fields.many2one('stock.move', "Move"),
-        'wizard_id' : fields.many2one('stock.change.date', string="Wizard"),
+        'date_expected': fields.datetime(
+            'Scheduled Date',
+            required=True,
+            readonly=True),
+        'move_id': fields.many2one('stock.move', "Move"),
+        'wizard_id': fields.many2one('stock.change.date', string="Wizard"),
         'new_date_expected': fields.datetime('New Schedule Date'),
-        'change_supplier_shortage':fields.boolean('Change Shortage'),
-        'original_date_expected':fields.datetime('Original Scheduled Date', readonly=True),
+        'change_supplier_shortage': fields.boolean('Change Shortage'),
+        'original_date_expected': fields.datetime('Original Scheduled Date',
+                                                  readonly=True),
     }
 
-    def on_change_supplier_shortage(self, cr, uid, ids, supplier_shortage, context=None):
-        return {'value' : {'change_supplier_shortage' : True}}
+    def on_change_supplier_shortage(self, cr, uid, ids,
+                                    supplier_shortage, context=None):
+        return {'value': {'change_supplier_shortage': True}}
 
 
-stock_change_date_line()
-
-class stock_change_date(osv.osv_memory):
+class stock_change_date(orm.TransientModel):
     _name = "stock.change.date"
     _description = "Change Stock Date Wizard"
 
     _columns = {
-        'move_ids' : fields.one2many('stock.change.date.line', 'wizard_id', 'Product Moves'),
-        'picking_id': fields.many2one('stock.picking', 'Picking', required=True, ondelete='CASCADE'),
-    }
-
-    _defaults = {
+        'move_ids': fields.one2many(
+            'stock.change.date.line',
+            'wizard_id',
+            'Product Moves'),
+        'picking_id': fields.many2one(
+            'stock.picking',
+            'Picking',
+            required=True,
+            ondelete='CASCADE'),
     }
 
     def default_get(self, cr, uid, fields, context=None):
-        if context is None: context = {}
-        res = super(stock_change_date, self).default_get(cr, uid, fields, context=context)
+        if context is None:
+            context = {}
+        res = super(stock_change_date, self).default_get(cr, uid, fields,
+                                                         context=context)
         picking_ids = context.get('active_ids', [])
         if not picking_ids or (not context.get('active_model') == 'stock.picking') \
             or len(picking_ids) != 1:
@@ -70,80 +82,73 @@ class stock_change_date(osv.osv_memory):
         if 'picking_id' in fields:
             res.update(picking_id=picking_id)
         if 'move_ids' in fields:
-            picking = self.pool.get('stock.picking').browse(cr, uid, picking_id, context=context)
-            moves = [self._change_date_for(cr, uid, m) for m in picking.move_lines if m.state not in ('done','cancel')]
+            picking = self.pool['stock.picking'].browse(cr, uid, picking_id, context=context)
+            moves = [self._change_date_for(cr, uid, m) for m in picking.move_lines if m.state not in ('done', 'cancel')]
             res.update(move_ids=moves)
         return res
 
     def _change_date_for(self, cr, uid, move):
         change_date = {
-            'product_id' : move.product_id.id,
-            'date_expected' : move.date_expected,
-            'supplier_shortage' : move.supplier_shortage,
+            'product_id': move.product_id.id,
+            'date_expected': move.date_expected,
+            'supplier_shortage': move.supplier_shortage,
             'original_date_expected': move.original_date_expected,
-            'move_id' : move.id,
+            'move_id': move.id,
         }
         return change_date
 
     def do_change(self, cr, uid, ids, context=None):
-        cal_obj = self.pool.get('resource.calendar')
+        cal_obj = self.pool['resource.calendar']
         assert len(ids) == 1, 'change date may only be done one at a time'
-        stock_picking = self.pool.get('stock.picking')
-        stock_move = self.pool.get('stock.move')
-        supinfo_obj = self.pool.get('product.supplierinfo')
-        po_line_obj = self.pool.get('purchase.order.line')
+        stock_move = self.pool['stock.move']
+        supinfo_obj = self.pool['product.supplierinfo']
+        po_line_obj = self.pool['purchase.order.line']
         change = self.browse(cr, uid, ids[0], context=context)
-        picking_type = change.picking_id.type
-        change_data = {}
         for move in change.move_ids:
             move_id = move.move_id.id
             if move.new_date_expected:
-                stock_move.write(cr,uid, move_id, {
-                                                    'date_expected' : move.new_date_expected,
-                                                    'date' : move.new_date_expected,
-                                                        },context=context)
-                purchase_line_id = po_line_obj.search(cr, uid, [
-                                                        ('product_id', '=', move.product_id.id),
-                                                        ('order_id', '=', change.picking_id.purchase_id.id)
-                                                        ], context=context)
-                po_line_obj.write(cr, uid, purchase_line_id, {
-                                        'date_planned': move.new_date_expected,
-                                        }, context=context)
+                stock_move.write(cr, uid, move_id,
+                                 {'date_expected': move.new_date_expected,
+                                  'date': move.new_date_expected},
+                                 context=context)
+                po_line_ids = po_line_obj.search(
+                    cr, uid, [
+                        ('product_id', '=', move.product_id.id),
+                        ('order_id', '=', change.picking_id.purchase_id.id)
+                        ], context=context)
+                po_line_obj.write(cr, uid, po_line_ids,
+                                  {'date_planned': move.new_date_expected},
+                                  context=context)
             if move.change_supplier_shortage:
-                supplierinfo_id = supinfo_obj.search(cr, uid, [
-                                                ('product_id', '=', move.product_id.id),
-                                                ('name', '=', change.picking_id.supplier_id.id)
-                                                ], context=context)
+                supplierinfo_id = supinfo_obj.search(
+                    cr, uid, [('product_id', '=', move.product_id.id),
+                              ('name', '=', change.picking_id.supplier_id.id)],
+                    context=context)
                 if not supplierinfo_id:
-                    raise osv.except_osv(_('Error !'), _('You need to define a supplierinfo for this product !'))
-                else:
-                    supplierinfo = supinfo_obj.browse(cr, uid, supplierinfo_id[0], context=context)
-                    product_id = supinfo_obj.write(cr, uid,
-                                                   supplierinfo_id,
-                                                   {
-                                                    'supplier_shortage': move.supplier_shortage,
-                                                    }, context=context)
-                    start_date = datetime.strptime(move.supplier_shortage, DEFAULT_SERVER_DATE_FORMAT)
-                    date_expected = cal_obj._get_date(cr, uid, None, start_date, supplierinfo.delay, context=context)
-                    move_lines = stock_move.search(cr, uid, [
-                                                        ('product_id', '=', move.product_id.id),
-                                                        ('date_expected', '<', date_expected.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
-                                                        ('picking_id.original_date', '>', change.picking_id.original_date)
-                                                        ], context=context)
-                    if move_id not in move_lines:
-                        move_lines.append(move_id)
-                    stock_move.write(cr, uid, move_lines, {
-                                                    'date_expected' : date_expected,
-                                                    'date' : date_expected,
-                                                    'supplier_shortage' : move.supplier_shortage,
-                                                    }, context=context)
-
-            change_data['move%s' % (move_id)] = {
-                'product_id': move.product_id.id,
-                'date_expected' : move.new_date_expected,
-                }
-        #stock_picking.do_change(cr, uid, [move.picking_id.id], change_data, context=context)
+                    raise orm.except_orm(_('Error !'),
+                                         _('You need to define a supplierinfo '
+                                           'for this product !'))
+                supplierinfo = supinfo_obj.browse(cr, uid, supplierinfo_id[0],
+                                                  context=context)
+                supinfo_obj.write(cr, uid, supplierinfo_id,
+                                  {'supplier_shortage': move.supplier_shortage},
+                                  context=context)
+                start_date = datetime.strptime(move.supplier_shortage,
+                                               DEFAULT_SERVER_DATE_FORMAT)
+                date_expected = cal_obj._get_date(cr, uid, None, start_date,
+                                                  supplierinfo.delay,
+                                                  context=context)
+                move_lines = stock_move.search(
+                    cr, uid, [('product_id', '=', move.product_id.id),
+                              ('date_expected', '<', date_expected.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+                              ('picking_id.original_date', '>', change.picking_id.original_date)],
+                    context=context)
+                if move_id not in move_lines:
+                    move_lines.append(move_id)
+                stock_move.write(cr, uid, move_lines,
+                                 {'date_expected': date_expected,
+                                  'date': date_expected,
+                                  'supplier_shortage': move.supplier_shortage},
+                                 context=context)
         return {'type': 'ir.actions.act_window_close'}
 
-
-stock_change_date()

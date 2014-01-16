@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  stock_delivery_times_advanced for OpenERP
-  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
-  The licence is in the file __openerp__.py
--->
 
 <openerp>
     <data>
-    
+
         <!-- INHERITED VIEW FOR THE OBJECT : product_supplierinfo -->
 
-		<record id="delivery_product_supplierinfo_view_form" model="ir.ui.view">
-			<field name="name">delivery_delays.product_supplierinfo.view_form</field>
-			<field name="model">product.supplierinfo</field>
-			<field name="inherit_id" ref="product.product_supplierinfo_form_view" />
-            <field eval="30" name="priority"/>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-				<data>
-					<field name="delay" position="after">
-						<field name="supplier_shortage" />
-					</field>
-				</data>
-			</field>
-		</record>
-		<record id="delivery_product_supplierinfo_view_tree" model="ir.ui.view">
-			<field name="name">delivery_delays.product_supplierinfo.view_tree</field>
-			<field name="model">product.supplierinfo</field>
-			<field name="inherit_id" ref="product.product_supplierinfo_tree_view" />
-            <field eval="30" name="priority"/>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">
-				<data>
-					<field name="delay" position="after">
-						<field name="supplier_shortage" />
-					</field>
-				</data>
-			</field>
-		</record>
+        <record id="delivery_product_supplierinfo_view_form" model="ir.ui.view">
+            <field name="name">product_supplierinfo.view_form</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="delay" position="after">
+                        <field name="supplier_shortage" />
+                    </field>
+                </data>
+            </field>
+        </record>
+        <record id="delivery_product_supplierinfo_view_tree" model="ir.ui.view">
+            <field name="name">product_supplierinfo.view_tree</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="delay" position="after">
+                        <field name="supplier_shortage" />
+                    </field>
+                </data>
+            </field>
+        </record>
 
         <record id="view_supplier_shortage_filter" model="ir.ui.view">
             <field name="name">product.supplierinfo.list.select</field>
@@ -45,7 +38,9 @@
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Search Product Supplierinfo">
-                    <filter icon="gtk-stop" string="Supplier Shortage" domain="[('supplier_shortage','!=',False)]" help="Products with the supplier in shortage"/>
+                    <filter icon="gtk-stop" string="Supplier Shortage"
+                        domain="[('supplier_shortage','!=',False)]"
+                        help="Products with the supplier in shortage"/>
                     <separator orientation="vertical"/>
                     <field name="product_id" select="1"/>
                     <field name="product_name" select="1"/>
@@ -59,19 +54,18 @@
         <record id="view_supplier_shortage_tree" model="ir.ui.view">
             <field name="name">product.supplierinfo.list.select</field>
             <field name="model">product.supplierinfo</field>
-            <field eval="30" name="priority"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree editable="top" string="Supplier Shortage">
                     <field name="product_id" />
                     <field name="product_name" />
                     <field name="product_code" />
-                    <field name="name" />       
+                    <field name="name" />
                     <field name="supplier_shortage" />
                     <field name="delay" />
-                </tree>        
+                </tree>
             </field>
-        </record>     
+        </record>
 
         <record id="action_supplier_shortage_view" model="ir.actions.act_window">
             <field name="name">Supplier Shortage</field>
@@ -81,8 +75,12 @@
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_supplier_shortage_filter"/>
             <field name="context">{"search_default_user_id":uid}</field>
-            <field name="help">Supplier Shortage help you manage products and suppliers.You can filter the products which have their supplier in shortage.</field>
+            <field name="help">
+                Supplier Shortage help you manage products and suppliers.
+                You can filter the products which have their supplier in shortage.
+            </field>
         </record>
+
         <record id="action_supplier_shortage_tree_view" model="ir.actions.act_window.view">
             <field eval="1" name="sequence"/>
             <field name="view_mode">tree</field>
@@ -90,7 +88,10 @@
             <field name="act_window_id" ref="action_supplier_shortage_view"/>
         </record>
 
-        <menuitem action="action_supplier_shortage_view" id="menu_supplier_shortage" parent="base.menu_product" sequence="3" groups="base.group_sale_salesman,base.group_sale_manager"/>
+        <menuitem action="action_supplier_shortage_view"
+            id="menu_supplier_shortage"
+            parent="base.menu_product" sequence="3"
+            groups="base.group_sale_salesman,base.group_sale_manager"/>
 
     </data>
 </openerp>
