@@ -76,7 +76,7 @@ class stock_move(orm.Model):
                     10),
                 'stock.move': (
                     lambda self, cr, uid, ids, c=None: ids,
-                    ['date_planned'],
+                    ['date_expected'],
                     10),
                 }),
         }
