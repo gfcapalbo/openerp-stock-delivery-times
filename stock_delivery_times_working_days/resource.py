@@ -1,50 +1,48 @@
-# -*- encoding: utf-8 -*-
-#################################################################################
-#                                                                               #
-#    stock_delivery_times_working_days for OpenERP                                          #
-#    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
-#                                                                               #
-#    This program is free software: you can redistribute it and/or modify       #
-#    it under the terms of the GNU Affero General Public License as             #
-#    published by the Free Software Foundation, either version 3 of the         #
-#    License, or (at your option) any later version.                            #
-#                                                                               #
-#    This program is distributed in the hope that it will be useful,            #
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of             #
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
-#    GNU Affero General Public License for more details.                        #
-#                                                                               #
-#    You should have received a copy of the GNU Affero General Public License   #
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.      #
-#                                                                               #
-#################################################################################
-
-from osv import osv, fields
-import netsvc
-import time
-from datetime import date
+# -*- coding: utf-8 -*-
+###############################################################################
+#
+#    stock_delivery_times_working_days for OpenERP
+#    Copyright (C) 2011-2014 Akretion
+#    Author: Benoît Guillot <benoit.guillot@akretion.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+from openerp.osv import orm
 from datetime import timedelta, datetime
-from dateutil.relativedelta import relativedelta
-from tools.translate import _
-from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools.translate import _
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
-class resource_calendar(osv.osv):
 
+class resource_calendar(orm.Model):
     _inherit = "resource.calendar"
 
-    _columns = {
-    }
-
-    _defautls = {
-    }
-
     def _get_date(self, cr, uid, id, start_date, delay, resource=False, context=None):
-        '''This method gives the first date after a delay from the start date considering the working time attached to the company calendar. Start_date should be a date not an openerp date'''
+        """This method gives the first date after a delay from the start date
+            considering the working time attached to the company calendar.
+            Start_date should be a date not an openerp date
+        """
         if not id:
-            company_id = self.pool.get('res.users').get_current_company(cr, uid)[0][0]
-            company = self.pool.get('res.company').read(cr, uid, company_id, ['calendar_id'], context=context)
+            company_id = self.pool['res.users'].read(cr, uid, uid,
+                                                     ['company_id'],
+                                                     context=context)['company_id'][0]
+            company = self.pool['res.company'].read(cr, uid, company_id,
+                                                    ['calendar_id'],
+                                                    context=context)
             if not company['calendar_id']:
-                raise osv.except_osv(_('Error !'), _('You need to define a calendar for the company !'))
+                raise orm.except_orm(_('Error !'),
+                                     _('You need to define a calendar for the company !'))
             id = company['calendar_id'][0]
         dt_leave = self._get_leaves(cr, uid, id, resource)
         calendar_info = self.browse(cr, uid, id, context=context)
@@ -62,4 +60,3 @@ class resource_calendar(osv.osv):
                 delay = delay - delta
         return date
 
-resource_calendar()

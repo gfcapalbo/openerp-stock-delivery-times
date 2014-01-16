@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  stock_delivery_times_working_days for OpenERP
-  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
-  The licence is in the file __openerp__.py
--->
 
 <openerp>
     <data>
@@ -14,18 +9,19 @@
             <field name="model">res.company</field>
             <field name="inherit_id" ref="base.view_company_form" />
             <field eval="30" name="priority"/>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <data>
                     <page string="Configuration" position="inside">
-                        <separator string="Working Time" colspan="4"/>
-                        <field name="calendar_id"/>
-                        <field name="sale_start_date"/>
-                        <field name="date_autorecompute"/>
+                        <group name="working_time">
+                            <separator string="Working Time" colspan="4"/>
+                            <field name="calendar_id"/>
+                            <field name="sale_start_date"/>
+                            <field name="date_autorecompute"/>
+                        </group>
                     </page> 
                 </data>
             </field>
         </record>
-    
+
     </data>
 </openerp>
