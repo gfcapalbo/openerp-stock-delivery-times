@@ -7,25 +7,20 @@
 
 <openerp>
     <data>
-    
+
         <!-- INHERITED VIEW FOR THE OBJECT : delivery orders -->
 
         <record id="delivery_order_working_days_view_form" model="ir.ui.view">
             <field name="name">working.days.delivery_orders.view_picking_out_form</field>
-            <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_out_form" />
-            <field eval="16" name="priority"/>
-            <field name="type">form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="/form/notebook/page[1]/field/form/group[3]/field[3]" position="after">
-                        <field name="move_delivery_date"/>
-                    </xpath>
-                    <xpath expr="/form/notebook/page[1]/field/tree/field[9]" position="after">
+                    <xpath expr="//field[@name='date_expected']" position="after">
                         <field name="move_delivery_date"/>
                     </xpath>
                 </data>
-            </field>                    
+            </field>
         </record>
 
     </data>
