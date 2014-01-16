@@ -59,10 +59,6 @@ class stock_picking(orm.Model):
             cr, uid, ids, name, value, arg, context=context)
 
     _columns = {
-        'original_date': fields.datetime(
-            'Original Expected Date',
-            help="Expected date planned at the creation of the picking, it "
-            "doesn't change if the expected date change"),
         'diff_days': fields.function(
             get_min_max_date,
             string='Interval Days',
