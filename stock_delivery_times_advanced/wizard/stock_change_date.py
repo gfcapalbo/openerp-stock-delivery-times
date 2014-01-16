@@ -28,6 +28,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FO
 class stock_change_date_line(orm.TransientModel):
     _name = "stock.change.date.line"
     _rec_name = 'product_id'
+
     _columns = {
         'product_id': fields.many2one(
             'product.product',
@@ -43,8 +44,9 @@ class stock_change_date_line(orm.TransientModel):
         'wizard_id': fields.many2one('stock.change.date', string="Wizard"),
         'new_date_expected': fields.datetime('New Schedule Date'),
         'change_supplier_shortage': fields.boolean('Change Shortage'),
-        'original_date_expected': fields.datetime('Original Scheduled Date',
-                                                  readonly=True),
+        'original_date_expected': fields.datetime(
+            'Original Scheduled Date',
+            readonly=True),
     }
 
     def on_change_supplier_shortage(self, cr, uid, ids,
@@ -68,34 +70,37 @@ class stock_change_date(orm.TransientModel):
             ondelete='CASCADE'),
     }
 
-    def default_get(self, cr, uid, fields, context=None):
+    def _get_default_picking(self, cr, uid, context=None):
         if context is None:
             context = {}
-        res = super(stock_change_date, self).default_get(cr, uid, fields,
-                                                         context=context)
-        picking_ids = context.get('active_ids', [])
-        if not picking_ids or (not context.get('active_model') == 'stock.picking') \
-            or len(picking_ids) != 1:
-            # change date may only be done for one picking at a time
-            return res
-        picking_id, = picking_ids
-        if 'picking_id' in fields:
-            res.update(picking_id=picking_id)
-        if 'move_ids' in fields:
-            picking = self.pool['stock.picking'].browse(cr, uid, picking_id, context=context)
-            moves = [self._change_date_for(cr, uid, m) for m in picking.move_lines if m.state not in ('done', 'cancel')]
-            res.update(move_ids=moves)
+        ids = context.get('active_ids', [])
+        assert len(ids) == 1, 'change date may only be done one at a time'
+        res = ids[0]
         return res
 
-    def _change_date_for(self, cr, uid, move):
-        change_date = {
-            'product_id': move.product_id.id,
-            'date_expected': move.date_expected,
-            'supplier_shortage': move.supplier_shortage,
-            'original_date_expected': move.original_date_expected,
-            'move_id': move.id,
+    def _get_default_lines(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        lines = []
+        picking_id = context.get('active_ids', []) and context['active_ids'][0]
+        if not picking_id:
+            return lines
+        picking = self.pool['stock.picking'].browse(cr, uid, picking_id, context=context)
+        for move in picking.move_lines:
+            if move.state not in ['done', 'cancel']:
+                lines.append({
+                    'product_id': move.product_id.id,
+                    'date_expected': move.date_expected,
+                    'supplier_shortage': move.supplier_shortage,
+                    'original_date_expected': move.original_date_expected,
+                    'move_id': move.id,
+                })
+        return lines
+
+    _defaults = {
+        'move_ids': _get_default_lines,
+        'picking_id': _get_default_picking,
         }
-        return change_date
 
     def do_change(self, cr, uid, ids, context=None):
         cal_obj = self.pool['resource.calendar']
@@ -122,7 +127,7 @@ class stock_change_date(orm.TransientModel):
             if move.change_supplier_shortage:
                 supplierinfo_id = supinfo_obj.search(
                     cr, uid, [('product_id', '=', move.product_id.id),
-                              ('name', '=', change.picking_id.supplier_id.id)],
+                              ('name', '=', change.picking_id.partner_id.id)],
                     context=context)
                 if not supplierinfo_id:
                     raise orm.except_orm(_('Error !'),

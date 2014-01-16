@@ -40,22 +40,9 @@ class stock_move(orm.Model):
 class stock_picking(orm.Model):
     _inherit = "stock.picking"
 
-    def change_expected_date(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        context = dict(context, active_ids=ids, active_model=self._name)
-        move_id = self.pool['stock.change.date'].create(cr, uid, {},
-                                                        context=context)
-        return {
-            'name': _("Products to Change"),
-            'view_mode': 'form',
-            'view_id': False,
-            'view_type': 'form',
-            'res_model': 'stock.change.date',
-            'res_id': move_id,
-            'type': 'ir.actions.act_window',
-            'nodestroy': True,
-            'target': 'new',
-            'domain': '[]',
-            'context': context,
+    _columns = {
+        'original_date': fields.datetime(
+            'Original Expected Date',
+            help="Expected date planned at the creation of the picking, it "
+            "doesn't change if the expected date change"),
         }

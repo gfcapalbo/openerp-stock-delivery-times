@@ -6,6 +6,7 @@
         <record id="action_change_date" model="ir.actions.act_window">
             <field name="name">Change Expected Date</field>
             <field name="res_model">stock.change.date</field>
+            <field name="scr_model">stock.picking.in</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
@@ -15,18 +16,19 @@
             <field name="name">stock.change.date.form</field>
             <field name="model">stock.change.date</field>
             <field name="arch" type="xml">
-                <form string="Product Moves">
+                <form string="Product Moves" version="7.0">
                     <field name="move_ids" colspan="4" nolabel="1"
-                        mode="tree,form" width="700" height="200"/>
-                    <separator string="" colspan="4" />
-                    <label string="" colspan="2"/>
-                    <group col="2" colspan="2">
-                        <button icon='gtk-cancel' special="cancel"
-                            string="_Cancel" />
-                        <button name="do_change" string="_Validate"
-                            colspan="1" type="object" icon="gtk-go-forward"
+                        mode="tree" width="700" height="200"/>
+<!--                    <separator string="" colspan="4" />-->
+<!--                    <label string="" colspan="2"/>-->
+                    <footer>
+                        <button name="do_change" string="Validate"
+                            type="object" class="oe_highlight"
                             confirm="Are you sure you want to modify this product ? It will change the expected date of all incomming shipments with the same product and change the supplier shortage date."/>
-                    </group>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+
+                    </footer>
                 </form>
             </field>
         </record>
@@ -55,7 +57,7 @@
                     <field name="product_id"/>
                     <field name="original_date_expected"/>
                     <field name="date_expected"/>
-                    <field name="new_date_expected" />
+                    <field name="new_date_expected"/>
                     <field name="supplier_shortage"/>
                  </form>
             </field>
