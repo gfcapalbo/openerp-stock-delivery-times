@@ -34,11 +34,11 @@
         'stock_available_immediately',
         ],
     'data': [
+        'wizard/stock_change_date_view.xml',
         'stock_view.xml',
         'sale_view.xml',
         'product_view.xml',
         'product_data.xml',
-        'wizard/stock_change_date_view.xml',
         ],
     'demo': [],
     'installable': True,
