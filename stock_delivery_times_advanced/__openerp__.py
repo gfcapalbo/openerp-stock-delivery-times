@@ -38,6 +38,7 @@
         'sale_view.xml',
         'product_view.xml',
         'product_data.xml',
+        'delivery_view.xml',
         'wizard/stock_change_date_view.xml',
         ],
     'demo': [],

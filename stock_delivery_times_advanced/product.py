@@ -41,22 +41,3 @@ class product_supplierinfo(orm.Model):
                    {'supplier_shortage': False},
                    context=context)
         return True
-
-
-class product_product(orm.Model):
-    _inherit = 'product.product'
-
-    def _get_delays(self, cr, uid, product, qty=1, context=None):
-        """Compute the delay information for a product
-        """
-        supplier_shortage = False
-        if (product.immediately_usable_qty - qty) >= 0:  # TODO check is there is an incomming shipment for the product
-            delay = product.sale_delay
-        else:
-            delay = (product.seller_info_id.delay or 0.0) + product.sale_delay
-            if product.seller_info_id.supplier_shortage:
-                #TODO use a different calendar for the supplier delay than the company calendar
-                supplier_shortage = product.seller_info_id['supplier_shortage']
-        #add purchase lead time
-        delay += product.company_id.po_lead
-        return delay, supplier_shortage
