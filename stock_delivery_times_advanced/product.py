@@ -46,6 +46,38 @@ class product_supplierinfo(orm.Model):
 class product_product(orm.Model):
     _inherit = 'product.product'
 
+    def _get_company_po_lead(self, cr, uid, product_obj, context=None):
+        '''Get po_lead from company. Company is taken, in order of preference,
+        from 1. product, 2. context, 3 user, 4. main company. if no company
+        is found, we will simply return a zero po leadtime.'''
+        context = context or {}
+        # check wether product refers to company
+        if product_obj.company_id:
+            return product_obj.company_id.po_lead
+        # Company in context?
+        if 'force_company' in context:
+            company_id = context['force_company']
+        else:
+            # Take company from user
+            user_model = self.pool['res.users']
+            user_record = user_model.read(
+                cr, uid, uid, ['company_id'], context=context)
+            company_id = (
+                user_record and user_record['company_id']
+                and user_record['company_id'][0] or False)
+            # if still no company, last resort is to use main company
+            if not company_id:
+                base_model = self.pool['ir.model.data']
+                company_id = base_model.get_object_reference(
+                    cr, uid, 'base', 'main_company')[1]
+        # If we still did not find a company, just return 0
+        if not company_id:
+            return 0.0
+        company_model = self.pool['res.company']
+        company_record = company_model.read(
+            cr, uid, company_id, ['po_lead'], context=context)
+        return company_record['po_lead']
+
     def _get_delays(self, cr, uid, product, qty=1, context=None):
         """Compute the delay information for a product
         """
@@ -58,5 +90,5 @@ class product_product(orm.Model):
                 #TODO use a different calendar for the supplier delay than the company calendar
                 supplier_shortage = product.seller_info_id['supplier_shortage']
         #add purchase lead time
-        delay += product.company_id.po_lead
+        delay += self._get_company_po_lead(cr, uid, product, context=context)
         return delay, supplier_shortage
