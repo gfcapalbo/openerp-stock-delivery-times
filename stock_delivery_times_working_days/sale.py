@@ -46,3 +46,35 @@ class sale_order(orm.Model):
         date_planned = date_planned - timedelta(days=order.company_id.security_lead)
         return (date_planned).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
+
+class sale_order_line(orm.Model):
+    _inherit = "sale.order.line"
+
+    def product_id_change(self, cr, uid, ids, pricelist, product_id, qty=0,
+            uom=False, qty_uos=0, uos=False, name='', partner_id=False,
+            lang=False, update_tax=True, date_order=False, packaging=False,
+            fiscal_position=False, flag=False, context=None):
+        """This method determine if there is enough stock for a sale order and
+            calculate the corresponding delay
+        """
+        res = super(sale_order_line, self).product_id_change(
+            cr, uid, ids, pricelist, product_id, qty, uom, qty_uos, uos, name,
+            partner_id, lang, update_tax, date_order, packaging,
+            fiscal_position, flag, context=context)
+        product_obj = self.pool['product.product']
+        if product_id:
+            total_qty = 0
+            if context.get('parent') and context.get('parent').get('id'):
+                order = self.pool['sale.order'].browse(
+                    cr, uid, context.get('parent').get('id'), context=context)
+                for line_product in order.order_line:
+                    if line_product.product_id.id == product_id and ids and line_product.id != ids[0]:
+                        total_qty += line_product.product_uom_qty
+            total_qty = total_qty + qty
+            product = product_obj.browse(cr, uid, product_id, context=context)
+            delay = product_obj._get_delays(cr, uid, product, qty=total_qty,
+                                            context=context)
+            res['value']['delay'] = delay
+        return res
+
+
