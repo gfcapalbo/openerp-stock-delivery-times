@@ -41,9 +41,9 @@ class sale_order(orm.Model):
         cal_obj = self.pool['resource.calendar']
         start_date = self._get_start_date(cr, uid, order, line, start_date, context=context)
         start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
-        date_planned = cal_obj._get_date(cr, uid, None, start_date, line.delay,
+        delay = line.delay - order.company_id.security_lead
+        date_planned = cal_obj._get_date(cr, uid, None, start_date, delay,
                                          context=context)
-        date_planned = date_planned - timedelta(days=order.company_id.security_lead)
         return (date_planned).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
 
