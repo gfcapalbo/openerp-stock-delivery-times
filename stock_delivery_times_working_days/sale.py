@@ -29,9 +29,9 @@ class sale_order(orm.Model):
 
     def _get_start_date(self, cr, uid, order, line, start_date, context=None):
         if order.company_id.sale_start_date == "order_date":
-            start_date = start_date
+            start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
         elif order.company_id.sale_start_date == "confirm_date":
-            start_date = order.date_confirm
+            start_date = datetime.now()
         return start_date
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
@@ -40,7 +40,6 @@ class sale_order(orm.Model):
         """
         cal_obj = self.pool['resource.calendar']
         start_date = self._get_start_date(cr, uid, order, line, start_date, context=context)
-        start_date = datetime.strptime(start_date, DEFAULT_SERVER_DATE_FORMAT)
         date_planned = cal_obj._get_date(cr, uid, None, start_date, line.delay,
                                          context=context)
         date_planned = date_planned - timedelta(days=order.company_id.security_lead)
