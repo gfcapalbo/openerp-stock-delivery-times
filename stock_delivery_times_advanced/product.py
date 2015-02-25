@@ -91,12 +91,13 @@ class product_product(orm.Model):
             mainseller = product.product_tmpl_id.seller_id
             if all_supplierinfos:
                 if mainseller:
+    	            mainsupplierinfo = None
                     for supplierinfo in all_supplierinfos:
-                        if supplierinfo.name == mainseller:
-                            mainsupplierinfo = supplierinfo
-                    mainsupplierinfo_obj = supplierinfo_obj.browse(cr, uid, mainsupplierinfo.id)
-                else:
-                    mainsupplierinfo_obj = all_supplierinfos[0]
+                            if supplierinfo.name == mainseller:
+                                mainsupplierinfo = supplierinfo
+                                mainsupplierinfo_obj = supplierinfo_obj.browse(cr, uid, mainsupplierinfo.id)
+                    if not mainsupplierinfo:
+                        mainsupplierinfo_obj = all_supplierinfos[0]
                 if mainsupplierinfo.supplier_shortage:
                     # TODO use a different calendar for the supplier delay than the company calendar
                     supplier_shortage = mainsupplierinfo_obj['supplier_shortage']

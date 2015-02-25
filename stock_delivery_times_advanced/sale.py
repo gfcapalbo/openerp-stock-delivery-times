@@ -42,8 +42,19 @@ class sale_order_line(orm.Model):
             fiscal_position, flag, context=context)
         product_obj = self.pool['product.product']
         if product_id:
+            total_qty = 0
+            if context.get('parent') and context.get('parent').get('id'):
+                order = self.pool['sale.order'].browse(
+                    cr, uid, context.get('parent').get('id'), context=context)
+                for line_product in order.order_line:
+                    if line_product.product_id.id == product and ids and line_product.id != ids[0]:
+                        total_qty += line_product.product_uom_qty
+            total_qty = total_qty + qty
             product = product_obj.browse(cr, uid, product_id, context=context)
-            res['value']['supplier_shortage'] = product.supplier_info_id and product.supplier_info_id.supplier_shortage or False
+            delay, supplier_shortage = product_obj._get_delays(
+                cr, uid, product, qty=total_qty, context=context)
+            res['value']['supplier_shortage'] = supplier_shortage
+            res['value']['delay'] = delay
         return res
 
 

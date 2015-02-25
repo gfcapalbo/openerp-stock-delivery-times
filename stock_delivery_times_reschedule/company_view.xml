@@ -11,16 +11,16 @@
     <!-- INHERITED VIEW FOR THE OBJECT : res_company -->
 
     <record id="res_company_view_form" model="ir.ui.view">
-        <field name="name">stock_delivery_delais_recompute.res_company.view_form</field>
+        <field name="name">stock_delivery_delays_recompute.res_company.view_form</field>
         <field name="model">res.company</field>
         <field name="inherit_id" ref="procurement.mrp_company" />
         <field eval="16" name="priority"/>
         <field name="type">form</field>
         <field name="arch" type="xml">
             <data>
-                <field name="schedule_range" position="after">
+                <group name="logistics_grp" position="inside">
                     <field name="reschedule_range" />
-                </field>
+                </group>
             </data>
         </field>
     </record>
